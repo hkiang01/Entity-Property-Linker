@@ -1,8 +1,8 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE document (
+CREATE TABLE entity (
     id  UUID DEFAULT uuid_generate_v4(),
     name TEXT NOT NULL,
-    parent UUID REFERENCES document(id),
+    parent_entity UUID REFERENCES entity(id),
     PRIMARY KEY (id)
 );

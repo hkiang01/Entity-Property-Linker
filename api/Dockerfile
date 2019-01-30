@@ -6,7 +6,6 @@ COPY package.json ./package.json
 COPY package-lock.json ./package-lock.json
 RUN npm install --quiet
 
-COPY config ./config
-COPY migrations ./migrations
-
-CMD ["npm", "run", "migrate"]
+COPY server.js server.js
+EXPOSE 3001
+CMD ["npm", "run", "start"]

@@ -1,0 +1,25 @@
+{
+  "name": "eop-api",
+  "version": "1.0.0",
+  "description": "entities of properties API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "sleep 10 && node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/hkiang01/eop.git"
+  },
+  "author": "Harrison Kiang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hkiang01/eop/issues"
+  },
+  "homepage": "https://github.com/hkiang01/eop#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "pg": "^7.8.0"
+  }
+}

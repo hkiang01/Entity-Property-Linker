@@ -1,18 +1,37 @@
 version: "3"
 
 services:
+  ui:
+    build: ui/
+    depends_on:
+      - api
+      - database
+    ports:
+      - "3000:3000"
+  api:
+    build: api/
+    depends_on:
+      - database
+      - migrate
+    ports:
+      - "3001:3001"
+    environment:
+      PGHOST: database
+      PORT: 3001
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: eop
+      PGPORT: 5432
   migrate:
     build: migrate/
     depends_on:
       - database
-    ports:
-      - "3000:3000"
   database:
     image: postgres:11
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_DB: fop
+      POSTGRES_DB: eop
     ports:
       - "5432:5432"

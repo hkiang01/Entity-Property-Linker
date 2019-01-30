@@ -4,7 +4,7 @@
     "user": "postgres",
     "password": "postgres",
     "host": "database",
-    "database": "fop"
+    "database": "eop"
   },
   "sql-file": true
 }

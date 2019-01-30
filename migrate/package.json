@@ -1,16 +1,16 @@
 {
-  "name": "fop",
+  "name": "eop-migrate",
   "version": "1.0.0",
-  "description": "fields off page",
+  "description": "entities of properties migration service",
   "main": "index.js",
   "scripts": {
-    "migrate": "sleep 10 && node ./node_modules/db-migrate/bin/db-migrate --config config/database.json -e dev up",
+    "migrate": "sleep 5 && node ./node_modules/db-migrate/bin/db-migrate --config config/database.json -e dev up",
     "rollback": "node ./node_modules/db-migrate/bin/db-migrate --config config/database.json -e dev down",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/hkiang01/fop.git"
+    "url": "git+ssh://git@github.com/hkiang01/eop.git"
   },
   "keywords": [
     "node",
@@ -21,9 +21,9 @@
   "author": "Harrison Kiang",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hkiang01/fop/issues"
+    "url": "https://github.com/hkiang01/eop/issues"
   },
-  "homepage": "https://github.com/hkiang01/fop#readme",
+  "homepage": "https://github.com/hkiang01/eop#readme",
   "dependencies": {
     "db-migrate": "^0.11.5",
     "db-migrate-pg": "^0.4.0"
