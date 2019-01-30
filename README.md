@@ -3,6 +3,15 @@ A simple Dockerized CRUD app using [Postgres](https://www.postgresql.org/),  [Ex
 Migrations are handled in a separate, dedicated service that uses [db-migrate](https://github.com/db-migrate/node-db-migrate).
 Migrations are located in 
 
+## Design decisions
+
+1 repo instead of 3. Why? 1 PR for everything instead of 1 PR for:
+- DB/migrations
+- API
+- UI
+
+It makes deployments a LOT easier.
+
 ## Prerequisites
 1. Install [docker](https://docs.docker.com/install/)
 2. Install [docker-compose](https://docs.docker.com/compose/install/)
@@ -33,6 +42,6 @@ Credentials: see [docker-compose.yml](docker-compose.yml) and [migrate/config/da
 Migrations: see [migrate/migrations/sqls](migrate/migrations/sqls) (new migrations: [create](https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#create))
 
 ### Linting
-Uses [JSHint](https://jshint.com/install/) (see [`.jshintrc`](.jshintrc))
+Uses [ESLint](https://eslint.org/) (see [`.eslintrc.json`](.eslintrc.json))
 1. Install [npm](https://www.npmjs.com/get-npm)
-2. `npm install jshint`
+2. `npm install`

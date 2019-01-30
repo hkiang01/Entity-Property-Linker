@@ -1,0 +1,26 @@
+{
+  "name": "eop",
+  "version": "1.0.0",
+  "description": "dev tools for eop",
+  "main": "\"\"",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.1",
+    "eslint-config-google": "^0.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hkiang01/eop.git"
+  },
+  "author": "Harrison Kiang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hkiang01/eop/issues"
+  },
+  "homepage": "https://github.com/hkiang01/eop#readme"
+}

@@ -30,9 +30,9 @@ app.get("/entity", function (req, res) {
 
 // insert entity
 app.post("/entity", function(req, res) {
-    const {name, parent_entity} = req.body;
-    const values = [name, parent_entity];
-    const text = "INSERT INTO entity(id, name, parent_entity) VALUES(uuid_generate_v4(), $1, $2) RETURNING *";
+    const {name} = req.body;
+    const values = [name];
+    const text = "INSERT INTO entity(id, name) VALUES(uuid_generate_v4(), $1) RETURNING *";
     client.query(text, values)
     .then(result => res.status(200).send(result.rows[0]))
     .catch(err => {
