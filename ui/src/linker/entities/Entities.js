@@ -139,19 +139,22 @@ class Entities extends React.Component {
   /**
    * Adds new entity to database with name present in 'query',
    * then adds the newly created entity to the entity list.
-   * Finally, clears the 'query' so the eneity list can be displayed in full.
+   * Finally, clears the 'query' (both state and search bar value)
+   * so the eneity list can be displayed in full.
    */
   handleAdd = event => {
     const newEntityName = document.getElementById("entity-query").value;
     addEntity(newEntityName)
     .then(response => {
       console.debug("handlAdd repsonse", response);
-      this.setState((prevState, props) => {
+      this.setState(((prevState, props) => {
         let entities = prevState.entities;
         entities.push(new Entity(response.id, response.name));
         return {
         query: "", entities: entities
-      }});
+      }}), () => {
+        document.getElementById("entity-query").value = "";
+      });
     });
   }
 
