@@ -80,7 +80,7 @@ class Entities extends React.Component {
   state = {
     selectedValue: null,
     query: null,
-    entities: [new Entity("", "ent0")],
+    entities: [],
     enableAddButton: false,
   };
 

@@ -8,6 +8,7 @@ RUN npm install --quiet
 
 COPY public public
 COPY src src
+COPY config config
 
 EXPOSE 3000
 CMD ["npm", "run", "start"]
