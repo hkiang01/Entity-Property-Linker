@@ -1,40 +1,33 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import InputBase from '@material-ui/core/InputBase';
-import Divider from '@material-ui/core/Divider';
-import Entities from './entities/Entities'
-import Properties from './properties/Properties'
+import Entities from './entities/Entities';
+import Properties from './properties/Properties';
+import Links from './links/Links';
 
 const styles = theme => ({
   root: {
+    marginTop: 10,
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
   }
 });
 
 function Linker (props) {
   const { classes } = props;
   return (
-    <div>
+    <div className={classes.root}>
       <Grid container spacing={24}>
         <Grid item xs>
-          <Paper className={classes.paper}>Entities</Paper>
+          <Entities />
         </Grid>
         <Grid item xs>
-          <Paper className={classes.paper}>Properties</Paper>
+          <Properties />
         </Grid>
       </Grid>
       <Grid container spacing={24}>
         <Grid item xs>
-          <Paper className={classes.paper}>Links</Paper>
+          <Links />
         </Grid>
       </Grid>
     </div>

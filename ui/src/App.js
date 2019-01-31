@@ -7,7 +7,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">Entity-Property Linker</div>
-        <Linker />
+        <Linker className="Linker"/>
       </div>
     );
   }
