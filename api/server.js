@@ -13,6 +13,10 @@ app.use(function(req, res, next) {
     next();
 });
 
+// enable the API to parse application/json
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+
 // Postgres connection
 const { Client } = require('pg');
 const client = new Client();
@@ -37,8 +41,11 @@ app.get("/entity", function (req, res) {
 
 // insert entity
 app.post("/entity", function(req, res) {
-    const {name} = req.body;
+    console.log("/entity post req", req);
+    console.log("/entity post req body", req.body);
+    const name = req.body.name;
     const values = [name];
+    console.log("values", values);
     const text = "INSERT INTO entity(id, name) VALUES(uuid_generate_v4(), $1) RETURNING *";
     client.query(text, values)
     .then(result => res.status(200).send(result.rows[0]))
