@@ -13,6 +13,9 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import * as apiConfig from '../../../config/api.json';
+
+const endpoint = apiConfig.dev.endpoint;
 
 const styles = theme => ({
   root: {
@@ -32,6 +35,14 @@ const styles = theme => ({
   }
 });
 
+const getEntries = async() => {
+  const response = await fetch(endpoint+'/entity');
+  const body = await response.json();
+  console.debug("getEntries response", response);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
+}
+
 class Entities extends React.Component {
   /**
    * Used to store
@@ -42,6 +53,20 @@ class Entities extends React.Component {
     selectedValue: null,
     values: ["0", "1", "2"]
   };
+
+  /**
+   * Gets the entiites from the database
+   */
+  componentDidMount() {
+    getEntries().then(res => {
+      this.setState(({
+        entities: res
+      }), () => {
+        console.debug(this.state);
+      });
+    });
+    //.catch(err => console.error(err));
+  }
 
   /**
    * Filters the list of entities

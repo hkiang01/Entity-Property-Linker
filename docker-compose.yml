@@ -8,6 +8,8 @@ services:
       - database
     ports:
       - "3000:3000"
+    environment:
+      API_PORT: 3001
   api:
     build: api/
     depends_on:

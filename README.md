@@ -33,13 +33,16 @@ Then run the following:
 sudo docker-compose down
 ```
 
-## Development
+## Configuration
 The following sections were tested using [Visual Studio Code](https://code.visualstudio.com/)
 
 ### Database
 Credentials: see [docker-compose.yml](docker-compose.yml) and [migrate/config/database.json](migrate/config/database.json) (they should match)
 
 Migrations: see [migrate/migrations/sqls](migrate/migrations/sqls) (new migrations: [create](https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#create))
+
+### UI/API
+Make sure the relevant environment vars in [docker-compose.yml](docker-compose.yml) and [ui/config/api.json](ui/config.api.json) match.
 
 ### Linting
 Uses [ESLint](https://eslint.org/) (see [`.eslintrc.json`](.eslintrc.json))
