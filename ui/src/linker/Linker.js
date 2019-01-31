@@ -7,7 +7,7 @@ import Links from './links/Links';
 
 const styles = theme => ({
   root: {
-    marginTop: 10,
+    margin: 10,
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
   }
