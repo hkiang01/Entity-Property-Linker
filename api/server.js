@@ -41,11 +41,9 @@ app.get("/entity", function (req, res) {
 
 // insert entity
 app.post("/entity", function(req, res) {
-    console.log("/entity post req", req);
-    console.log("/entity post req body", req.body);
+    console.log("post '/entity' from ", req.ip);
     const name = req.body.name;
     const values = [name];
-    console.log("values", values);
     const text = "INSERT INTO entity(id, name) VALUES(uuid_generate_v4(), $1) RETURNING *";
     client.query(text, values)
     .then(result => res.status(200).send(result.rows[0]))
