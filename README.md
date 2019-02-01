@@ -27,8 +27,10 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
 ## Prerequisites
 
-1. Install [docker](https://docs.docker.com/install/)
-2. Install [docker-compose](https://docs.docker.com/compose/install/)
+- [docker](https://docs.docker.com/install/)
+- [docker-compose](https://docs.docker.com/compose/install/)
+- [nvm](https://github.com/creationix/nvm#important-notes)
+- [node](https://nodejs.org/en/) (make sure the version used in [ui/Dockerfile](ui/Dockerfile) corresponds to the version used in [.nvmrc](.nvmrc))
 
 ## Running the application
 
