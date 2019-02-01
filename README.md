@@ -7,7 +7,7 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
 1. Dockerized from the start
 
-   To deliver business value the fastest, you should be in a deployable state from day one. This enables the agile practice of iterative development, and allows stakeholders earlier opportunities to give feedback, saving development time.
+   To deliver business value the fastest, you should be in a deployable state from day one. This enables the agile practice of iterative development, and allows stakeholders earlier opportunities to give feedback, saving development time. I'm assuming you know how to deploy Docker apps.
 
 2. A single repo instead of 3. Why? 1 PR for everything instead of 1 PR for each of the following:
 
@@ -36,8 +36,6 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
 ## Running the application
 
-The following sections were tested in Ubuntu 18.10
-
 ### Startup
 
 ```bash
@@ -58,17 +56,15 @@ docker-compose down
 
 ## Configuration
 
-The following sections were tested using [Visual Studio Code](https://code.visualstudio.com/)
-
 ### Database
 
 Credentials: see [docker-compose.yml](docker-compose.yml) and [api/config/database.json](api/config/database.json) (they should match)
 
-Migrations: see [api/migrations/sqls](api/migrations/sqls) (new migrations: [create](https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#create))
-
 ### UI/API
 
-Make sure the relevant environment vars in [docker-compose.yml](docker-compose.yml) and [ui/config/api.json](ui/config.api.json) match.
+Make sure the relevant environment vars in [docker-compose.yml](docker-compose.yml) and [ui/config/api.json](ui/config/api.json) match.
+
+## Development
 
 ### Linting
 
@@ -77,19 +73,36 @@ Uses [ESLint](https://eslint.org/) (see [`.eslintrc.json`](.eslintrc.json))
 1. Install [npm](https://www.npmjs.com/get-npm)
 2. `npm install`
 
-## Development
-
 ### Database Migrations
 
-```bash
-docker-compose up database
-docker-compose run api run npm migrate
-```
+1. Start database
+
+    ```bash
+    docker-compose up database
+    ```
+
+2. Run migrations forward
+
+    ```bash
+    docker-compose run api run npm migrate
+    ```
+
+3. Run migrations backwards
+
+    ```bash
+    docker-compose run api run npm rollback
+    ```
+See [api/migrations/sqls](api/migrations/sqls) (new migrations: [create](https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#create))
 
 ### UI only
 
-```bash
-docker-compose up database api
-cd ui
-npm start
-```
+1. Start database and api
+    ```bash
+    docker-compose up database api
+    ```
+2. In a separate terminal, start the UI
+    ```bash
+    cd ui
+    npm start
+    ```
+3. Navigate to [http://localhost:3000](http://localhost:3000)
