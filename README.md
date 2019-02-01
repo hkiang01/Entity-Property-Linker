@@ -11,7 +11,7 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
 2. A single repo instead of 3. Why? 1 PR for everything instead of 1 PR for the API, and then another for the UI
 
-   This also makes deployments easier as some changes might be tightly coupled between, e.g., DB and API.
+   This also makes deployments easier as some changes might be tightly coupled between, the API and UI.
 
 3. Migrations in the API (see [Pattern: Database per service](https://microservices.io/patterns/data/database-per-service.html))
 
