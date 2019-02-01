@@ -5,7 +5,11 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
 ## Design decisions
 
-1. A single repo instead of 3. Why? 1 PR for everything instead of 1 PR for each of the following:
+1. Dockerized from the start
+
+   To deliver business value the fastest, you should be in a deployable state from day one. This enables the agile practice of iterative development, and allows stakeholders earlier opportunities to give feedback, saving development time.
+
+2. A single repo instead of 3. Why? 1 PR for everything instead of 1 PR for each of the following:
 
     - DB
     - API w/ self-contained migrations
@@ -13,8 +17,17 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
    This also makes deployments easier as some changes might be tightly coupled between, e.g., DB and API.
 
-2. Migrations in the API (see [Pattern: Database per service](https://microservices.io/patterns/data/database-per-service.html))
+3. Migrations in the API (see [Pattern: Database per service](https://microservices.io/patterns/data/database-per-service.html))
 
+   You need migrations. Don't create separate files that you need to run manually. Your application should be as easy to run and deploy as possible.
+
+4. UI React components grouped by features (see [File Structure](https://reactjs.org/docs/faq-structure.html#grouping-by-features-or-routes))
+
+   This makes it easier to focus on features that deliver business value vs getting lost in the technical details of how to implement business features.
+
+5. API calls build into React UI components.
+
+   The whole point of components is that they're reusable. There should be as few tightly coupled relationships between files as possible.
 
 ## Prerequisites
 
