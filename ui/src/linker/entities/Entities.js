@@ -43,8 +43,8 @@ function Entity(id, name) {
 /**
  * Gets entries from API
  */
-const getEntries = async() => {
-  const response = await fetch(endpoint+'/entity');
+const getEntries = async () => {
+  const response = await fetch(endpoint + '/entity');
   const body = await response.json();
   console.debug("getEntries response", response);
   if (response.status !== 200) throw Error(body.message);
@@ -54,9 +54,9 @@ const getEntries = async() => {
 /**
  * Adds an entity to the database by name
  */
-const addEntity = async(name) => {
-  const data = JSON.stringify({name: name});
-  const response = await fetch(endpoint+'/entity', {
+const addEntity = async (name) => {
+  const data = JSON.stringify({ name: name });
+  const response = await fetch(endpoint + '/entity', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ const addEntity = async(name) => {
   const body = await response.json();
   console.debug("addEntry response", response);
   console.debug("addEntry body", body);
-  if(response.status !== 200) throw Error(body.message);
+  if (response.status !== 200) throw Error(body.message);
   return body;
 }
 
@@ -95,7 +95,7 @@ class Entities extends React.Component {
         console.debug(this.state);
       });
     })
-    .catch(err => console.error(err));
+      .catch(err => console.error(err));
   }
 
   /**
@@ -121,7 +121,7 @@ class Entities extends React.Component {
    */
   handleSelection = (event, checked) => {
     const selectionValue = event.target.value;
-    if(this.state.selectedValue === selectionValue) {
+    if (this.state.selectedValue === selectionValue) {
       this.setState(({
         selectedValue: null
       }), () => {
@@ -145,37 +145,38 @@ class Entities extends React.Component {
   handleAdd = event => {
     const newEntityName = document.getElementById("entity-query").value;
     addEntity(newEntityName)
-    .then(response => {
-      console.debug("handlAdd repsonse", response);
-      this.setState(((prevState, props) => {
-        let entities = prevState.entities;
-        entities.push(new Entity(response.id, response.name));
-        return {
-        query: "", entities: entities
-      }}), () => {
-        document.getElementById("entity-query").value = "";
+      .then(response => {
+        console.debug("handlAdd repsonse", response);
+        this.setState(((prevState, props) => {
+          let entities = prevState.entities;
+          entities.push(new Entity(response.id, response.name));
+          return {
+            query: "", entities: entities
+          }
+        }), () => {
+          document.getElementById("entity-query").value = "";
+        });
       });
-    });
   }
 
   handleDeletion = event => {
     console.debug("deletion", this.state.selectedValue);
   }
 
- /**
-   * Generates entities, each with:
-   * - A checkbox
-   * - Some text
-   * - A delete icon
-   * 
-   * Also adds handlers which enable:
-   * - Selecting an entity
-   * - Deleting an entity
-   * 
-   * Finally, the entity is visible only if:
-   * - the search box is empty, or
-   * - the search box's query value is contained within the entity's name
-   */
+  /**
+    * Generates entities, each with:
+    * - A checkbox
+    * - Some text
+    * - A delete icon
+    * 
+    * Also adds handlers which enable:
+    * - Selecting an entity
+    * - Deleting an entity
+    * 
+    * Finally, the entity is visible only if:
+    * - the search box is empty, or
+    * - the search box's query value is contained within the entity's name
+    */
   generateEntities(entityObjs) {
     return entityObjs.map(entityObj => (!this.state.query || entityObj.name.includes(this.state.query)) && (
       <ListItem
@@ -233,7 +234,7 @@ class Entities extends React.Component {
             color="secondary"
             disabled={!this.state.enableAddButton}
             onClick={this.handleAdd}
-            >
+          >
             Add
           </Button>
         </Grid>
