@@ -25,8 +25,8 @@ The following sections were tested in Ubuntu 18.10
 ### Startup
 
 ```bash
-sudo docker-compose build
-sudo docker-compose up
+docker-compose build
+docker-compose up
 ```
 
 Open browser to [http://localhost:3000](http://localhost:3000)
@@ -37,7 +37,7 @@ Press `Ctrl+C` if in the same terminal instance running the app.
 Then run the following:
 
 ```bash
-sudo docker-compose down
+docker-compose down
 ```
 
 ## Configuration
