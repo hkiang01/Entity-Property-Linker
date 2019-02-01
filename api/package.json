@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "sleep 10 && node server.js"
+    "migrate": "sleep 5 && node ./node_modules/db-migrate/bin/db-migrate --config config/database.json -e dev up",
+    "rollback": "node ./node_modules/db-migrate/bin/db-migrate --config config/database.json -e dev down",
+    "prestart": "npm run migrate",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,8 @@
   "homepage": "https://github.com/hkiang01/eop#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "db-migrate": "^0.11.5",
+    "db-migrate-pg": "^0.4.0",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
     "pg": "^7.8.0"

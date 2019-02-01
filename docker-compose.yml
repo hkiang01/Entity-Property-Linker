@@ -14,7 +14,6 @@ services:
     build: api/
     depends_on:
       - database
-      - migrate
     ports:
       - "3001:3001"
     environment:
@@ -24,10 +23,6 @@ services:
       PGPASSWORD: postgres
       PGDATABASE: eop
       PGPORT: 5432
-  migrate:
-    build: migrate/
-    depends_on:
-      - database
   database:
     image: postgres:11
     environment:
