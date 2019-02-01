@@ -1,6 +1,6 @@
 # eop (entities of properties)
 
-A simple Dockerized CRUD app using [Postgres](https://www.postgresql.org/),  [Express](https://expressjs.com/), and [React](https://reactjs.org/) that manages entities, which have properties.
+A simple Dockerized CRUD app using [Postgres](https://www.postgresql.org/), [Express](https://expressjs.com/), and [React](https://reactjs.org/) that manages entities, which have properties.
 Migrations are handled in the API and use [db-migrate](https://github.com/db-migrate/node-db-migrate).
 
 ## Design decisions
@@ -31,10 +31,10 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 - [docker-compose](https://docs.docker.com/compose/install/)
 - [node](https://nodejs.org/en/) (make sure the version used in [ui/Dockerfile](ui/Dockerfile) corresponds to the version used in [.nvmrc](.nvmrc))
 - [nvm](https://github.com/creationix/nvm#important-notes)
-    Load the version of node used in the project:
-    ```bash
-    nvm use
-    ```
+  Load the version of node used in the project:
+  ```bash
+  nvm use
+  ```
 
 ## Running the application
 
@@ -68,43 +68,58 @@ Make sure the relevant environment vars in [docker-compose.yml](docker-compose.y
 
 ## Development
 
-### Linting
+### Linting/Auto-formatting
 
-Uses [ESLint](https://eslint.org/) (see [`.eslintrc.json`](.eslintrc.json))
+Uses the following VS Code plugin:
 
-1. Install [npm](https://www.npmjs.com/get-npm)
-2. `npm install`
+Name: Prettier - Code formatter
+Id: esbenp.prettier-vscode
+Description: VS Code plugin for prettier/prettier
+Version: 1.8.1
+Publisher: Esben Petersen
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 
 ### Database Migrations
 
-1. Start database
+1.  Start database
 
     ```bash
     docker-compose up database
     ```
 
-2. Run migrations forward
+2.  Run migrations forward
 
     ```bash
     docker-compose run api run npm migrate
     ```
 
-3. Run migrations backwards
+3.  Run migrations backwards
 
-    ```bash
-    docker-compose run api run npm rollback
-    ```
-See [api/migrations/sqls](api/migrations/sqls) (new migrations: [create](https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#create))
+        ```bash
+        docker-compose run api run npm rollback
+        ```
+
+    See [api/migrations/sqls](api/migrations/sqls) (new migrations: [create](https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#create))
 
 ### UI only
 
-1. Start database and api
-    ```bash
-    docker-compose up database api
-    ```
-2. In a separate terminal, start the UI
-    ```bash
-    cd ui
-    npm start
-    ```
-3. Navigate to [http://localhost:3000](http://localhost:3000)
+1. Install project-wide dev dependencies
+
+   ```bash
+   npm install --dev
+   ```
+
+2. Start database and api
+
+   ```bash
+   docker-compose up database api
+   ```
+
+3. In a separate terminal, start the UI
+
+   ```bash
+   cd ui
+   npm start
+   ```
+
+4. Navigate to [http://localhost:3000](http://localhost:3000)

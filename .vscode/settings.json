@@ -1,5 +1,6 @@
 {
-    "files.associations": {
-        ".jshintrc": "jsonc"
-    }
+  "files.associations": {
+    ".jshintrc": "jsonc"
+  },
+  "editor.formatOnSave": true
 }

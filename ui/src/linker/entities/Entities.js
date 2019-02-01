@@ -1,37 +1,40 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import * as apiConfig from '../../../config/api.json';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
+import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Checkbox from "@material-ui/core/Checkbox";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import * as apiConfig from "../../../config/api.json";
 
-const endpoint = apiConfig.dev.endpoint;
-
+/**
+ * Styles named after their respective components.
+ * For example, typography is for the <Typography /> component
+ */
 const styles = theme => ({
   root: {
-    width: '100%',
-    padding: theme.spacing.unit * 2
+    width: "100%",
+    padding: theme.spacing.unit * 2,
+    dense: true
   },
   typography: {
     marginLeft: 10,
     marginBottom: 20
   },
   paper: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2
   },
   input: {
     marginLeft: 8,
-    flex: 1,
+    flex: 1
   }
 });
 
@@ -41,34 +44,39 @@ function Entity(id, name) {
 }
 
 /**
- * Gets entries from API
+ * The baseUrl for API requests
  */
-const getEntries = async () => {
-  const response = await fetch(endpoint + '/entity');
+const endpoint = apiConfig.dev.endpoint;
+
+/**
+ * Gets entities from API
+ */
+const getEntities = async () => {
+  const response = await fetch(endpoint + "/entity");
   const body = await response.json();
-  console.debug("getEntries response", response);
+  console.debug("getEntities response", response);
   if (response.status !== 200) throw Error(body.message);
   return body;
-}
+};
 
 /**
  * Adds an entity to the database by name
  */
-const addEntity = async (name) => {
+const addEntity = async name => {
   const data = JSON.stringify({ name: name });
-  const response = await fetch(endpoint + '/entity', {
-    method: 'POST',
+  const response = await fetch(endpoint + "/entity", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json"
     },
     body: data
   });
   const body = await response.json();
-  console.debug("addEntry response", response);
-  console.debug("addEntry body", body);
+  console.debug("addEntity response", response);
+  console.debug("addEntity body", body);
   if (response.status !== 200) throw Error(body.message);
   return body;
-}
+};
 
 class Entities extends React.Component {
   /**
@@ -81,20 +89,24 @@ class Entities extends React.Component {
     selectedValue: null,
     query: null,
     entities: [],
-    enableAddButton: false,
+    enableAddButton: false
   };
 
   /**
    * Gets the entiites from the database,
    */
   componentDidMount() {
-    getEntries().then(res => {
-      this.setState(({
-        entities: res
-      }), () => {
-        console.debug(this.state);
-      });
-    })
+    getEntities()
+      .then(res => {
+        this.setState(
+          {
+            entities: res
+          },
+          () => {
+            console.debug(this.state);
+          }
+        );
+      })
       .catch(err => console.error(err));
   }
 
@@ -105,13 +117,19 @@ class Entities extends React.Component {
    * - there exists no entity whose name contains the 'query'
    */
   handleSearch = event => {
-    const queryValue = event.target.value
-    this.setState(({
-      query: queryValue,
-      enableAddButton: !!(queryValue && !this.state.entities.find(entity => entity.name.includes(queryValue)))
-    }), () => {
-      console.debug(this.state);
-    });
+    const queryValue = event.target.value;
+    this.setState(
+      {
+        query: queryValue,
+        enableAddButton: !!(
+          queryValue &&
+          !this.state.entities.find(entity => entity.name.includes(queryValue))
+        )
+      },
+      () => {
+        console.debug(this.state);
+      }
+    );
   };
 
   /**
@@ -122,19 +140,25 @@ class Entities extends React.Component {
   handleSelection = (event, checked) => {
     const selectionValue = event.target.value;
     if (this.state.selectedValue === selectionValue) {
-      this.setState(({
-        selectedValue: null
-      }), () => {
-        console.debug(this.state);
-      });
+      this.setState(
+        {
+          selectedValue: null
+        },
+        () => {
+          console.debug(this.state);
+        }
+      );
     } else {
-      this.setState(({
-        selectedValue: event.target.value
-      }), () => {
-        console.debug(this.state);
-      });
+      this.setState(
+        {
+          selectedValue: event.target.value
+        },
+        () => {
+          console.debug(this.state);
+        }
+      );
     }
-  }
+  };
 
   /**
    * Adds new entity to database with name present in 'query',
@@ -144,66 +168,66 @@ class Entities extends React.Component {
    */
   handleAdd = event => {
     const newEntityName = document.getElementById("entity-query").value;
-    addEntity(newEntityName)
-      .then(response => {
-        console.debug("handlAdd repsonse", response);
-        this.setState(((prevState, props) => {
+    addEntity(newEntityName).then(response => {
+      console.debug("handlAdd repsonse", response);
+      this.setState(
+        (prevState, props) => {
           let entities = prevState.entities;
           entities.push(new Entity(response.id, response.name));
           return {
-            query: "", entities: entities
-          }
-        }), () => {
+            query: "",
+            entities: entities
+          };
+        },
+        () => {
           document.getElementById("entity-query").value = "";
-        });
-      });
-  }
+        }
+      );
+    });
+  };
 
   handleDeletion = event => {
     console.debug("deletion", this.state.selectedValue);
-  }
+  };
 
   /**
-    * Generates entities, each with:
-    * - A checkbox
-    * - Some text
-    * - A delete icon
-    * 
-    * Also adds handlers which enable:
-    * - Selecting an entity
-    * - Deleting an entity
-    * 
-    * Finally, the entity is visible only if:
-    * - the search box is empty, or
-    * - the search box's query value is contained within the entity's name
-    */
+   * Generates entities, each with:
+   * - A checkbox
+   * - Some text
+   * - A delete icon
+   *
+   * Also adds handlers which enable:
+   * - Selecting an entity
+   * - Deleting an entity
+   *
+   * Finally, the entity is visible only if:
+   * - the search box is empty, or
+   * - the search box's query value is contained within the entity's name
+   */
   generateEntities(entityObjs) {
-    return entityObjs.map(entityObj => (!this.state.query || entityObj.name.includes(this.state.query)) && (
-      <ListItem
-        hidden={false}
-        key={entityObj.id}
-      >
-        <Checkbox
-          checked={this.state.selectedValue === entityObj.name}
-          onChange={this.handleSelection}
-          value={entityObj.name}
-        />
-        <ListItemText
-          primary={entityObj.name}
-        />
-        <ListItemSecondaryAction>
-          <IconButton
-            aria-label="Delete"
-            onClick={this.handleDeletion}
-            value={entityObj.name}
-            disabled={this.state.selectedValue !== entityObj.name}
-          >
-            <DeleteIcon
+    return entityObjs.map(
+      entityObj =>
+        (!this.state.query || entityObj.name.includes(this.state.query)) && (
+          <ListItem hidden={false} key={entityObj.id}>
+            <Checkbox
+              checked={this.state.selectedValue === entityObj.name}
+              onChange={this.handleSelection}
+              value={entityObj.name}
             />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    ))
+            <ListItemText primary={entityObj.name} />
+            <ListItemSecondaryAction>
+              <IconButton
+                aria-label="Delete"
+                onClick={this.handleDeletion}
+                value={entityObj.name}
+                disabled={this.state.selectedValue !== entityObj.name}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        )
+    );
   }
 
   /**
@@ -216,7 +240,12 @@ class Entities extends React.Component {
     const { classes } = this.props;
     return (
       <Paper className={classes.paper}>
-        <Typography className={classes.typography} variant='h4' gutterBottom align="left">
+        <Typography
+          className={classes.typography}
+          variant="h4"
+          gutterBottom
+          align="left"
+        >
           Entities
         </Typography>
         <Grid container spacing={16}>
@@ -239,7 +268,7 @@ class Entities extends React.Component {
           </Button>
         </Grid>
         <Grid container spacing={16}>
-          <List id="entries-list" className={classes.root}>
+          <List id="entities-list" className={classes.root}>
             {this.generateEntities(this.state.entities)}
           </List>
         </Grid>
