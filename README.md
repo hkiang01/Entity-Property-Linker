@@ -9,11 +9,7 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
    To deliver business value the fastest, you should be in a deployable state from day one. This enables the agile practice of iterative development, and allows stakeholders earlier opportunities to give feedback, saving development time. I'm assuming you know how to deploy Docker apps.
 
-2. A single repo instead of 3. Why? 1 PR for everything instead of 1 PR for each of the following:
-
-    - DB
-    - API w/ self-contained migrations
-    - UI
+2. A single repo instead of 3. Why? 1 PR for everything instead of 1 PR for the API, and then another for the UI
 
    This also makes deployments easier as some changes might be tightly coupled between, e.g., DB and API.
 
