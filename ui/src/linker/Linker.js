@@ -22,15 +22,22 @@ class Linker extends React.Component {
 
   state = {
     selectedEntity: null,
-    selectedProperty: null
+    selectedProperty: null,
+    selectedLink: null
   };
 
+  /**
+   * Makes the Linker aware of the selected entity
+   */
   selectedEntityListener(selectedEntity) {
     this.setState({ selectedEntity: selectedEntity }, () => {
       console.debug("selectedEntityListener", this.state);
     });
   }
 
+  /**
+   * Makes the Linker aware of the selected property
+   */
   selectedPropertyListener(selectedProperty) {
     this.setState({ selectedProperty: selectedProperty }, () => {
       console.debug("selectedPropertyListener", this.state);
