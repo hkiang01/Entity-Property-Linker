@@ -39,17 +39,17 @@ const styles = theme => ({
 });
 
 /**
- * The baseUrl for API requests
- */
-const endpoint = apiConfig.dev.endpoint;
-
-/**
  * An Entity corresponding to the DB's `entity` table
  */
 function Entity(id, name) {
   this.id = id;
   this.name = name;
 }
+
+/**
+ * The baseUrl for API requests
+ */
+const endpoint = apiConfig.dev.endpoint;
 
 /**
  * Gets entities from the database
@@ -61,6 +61,12 @@ const getEntities = async () => {
   if (response.status !== 200) throw Error(body.message);
   return body;
 };
+
+/**
+ * Gets entities where the entityIds match entity.id in the database
+ * @param {string[]} entityIds - A list containing ids of entities to get
+ */
+const getEntitiesOnId = async entityIds => {};
 
 /**
  * Adds an entity to the database by name
@@ -116,6 +122,19 @@ class Entities extends React.Component {
   };
 
   /**
+   * Gets the entiites from the database,
+   */
+  componentDidMount() {
+    getEntities()
+      .then(res => {
+        this.setState({ entities: res }, () => {
+          console.debug("componentDidMount state", this.state);
+        });
+      })
+      .catch(err => console.error(err));
+  }
+
+  /**
    * Adds new entity to database with name present in 'query',
    * then adds the newly created entity to the entity list.
    *
@@ -160,19 +179,6 @@ class Entities extends React.Component {
       });
     });
   };
-
-  /**
-   * Gets the entiites from the database,
-   */
-  componentDidMount() {
-    getEntities()
-      .then(res => {
-        this.setState({ entities: res }, () => {
-          console.debug("componentDidMount state", this.state);
-        });
-      })
-      .catch(err => console.error(err));
-  }
 
   /**
    * Filters the list of entities

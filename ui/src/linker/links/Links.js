@@ -7,11 +7,7 @@ import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import ListItem from "@material-ui/core/ListItem";
-import Radio from "@material-ui/core/Radio";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import DeleteIcon from "@material-ui/icons/Delete";
+import * as apiConfig from "../../../config/api.json";
 
 /**
  * Styles named after their respective components.
@@ -41,6 +37,22 @@ function Link(entity_id, property_id) {
   this.property_id = property_id;
 }
 
+/**
+ * The baseUrl for API requests
+ */
+const endpoint = apiConfig.dev.endpoint;
+
+/**
+ * Gets Links from the database
+ */
+const getLinks = async () => {
+  const response = await fetch(endpoint + "/link");
+  const body = await response.json();
+  console.debug("getLinks response", response);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
+};
+
 class Links extends React.Component {
   /**
    * Used to store
@@ -50,60 +62,23 @@ class Links extends React.Component {
    * - whether the user can click the 'Add' button
    */
   state = {
-    selectedLInk: null,
+    selectedLink: null,
     query: null,
     links: [],
     enableAddButton: false
   };
 
   /**
-   * Generates link, each with:
-   * - A radio button
-   * - text for the corresponding entity
-   * - a divider
-   * - text for the corresponding property
-   * - A delete icon
-   *
-   * Also adds handlers which enable:
-   * - Selecting a link
-   * - Deleting a link
-   *
-   * Finally, the link is visible only if:
-   * - the search box is empty, or
-   * - the search box's query value is contained within
-   *   either the corresponding entity or property
+   * Gets the entiites from the database,
    */
-  generateLinks(linkObjs) {
-    return linkObjs.map(
-      linkObj =>
-        (!this.state.query ||
-          linkObj.entity.name.includes(this.state.query) ||
-          linkObj.property.name.includes(this.state.query)) && (
-          <ListItem
-            hidden={false}
-            key={linkObj.entity.id + linkObj.property.id}
-          >
-            <Radio
-              checked={this.state.selectedLink === linkObj}
-              onChange={this.handleSelection}
-              value={linkObj.entity.id + linkObj.property.id}
-            />
-            <ListItemText
-              primary={linkObj.entity.name + linkObj.property.name}
-            />
-            <ListItemSecondaryAction>
-              <IconButton
-                aria-label="Delete"
-                onClick={this.handleDelete}
-                value={linkObj.entity.id + linkObj.property.id}
-                disabled={this.state.selectedLink !== linkObj}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        )
-    );
+  componentDidMount() {
+    getLinks()
+      .then(res => {
+        this.setState({ links: res }, () => {
+          console.debug("componentDidMount state", this.state);
+        });
+      })
+      .catch(err => console.error(err));
   }
 
   render() {
@@ -123,7 +98,7 @@ class Links extends React.Component {
             <SearchIcon />
           </IconButton>
           <InputBase
-            id="entity-query"
+            id="link-query"
             className={classes.input}
             placeholder="Search Links"
             onChange={this.handleSearch}
