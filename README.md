@@ -31,7 +31,9 @@ Priority number 1: enable the delivery business value
 
    This removes ambiguity in dealing with JSON objects that represent database objects, and respect the database schema as the single source of truth for their structure. The less ambiguity, the more certainty, and the more likely you're able to deliver business value quickly.
 
-7. Most logs are at the debug level
+   Since the API calls are in the same file as everything else for a given component (see #5), it's easy to change this structure as needed, as you only need to modify a single file in the UI. The fewer files you need to change when the schema for a DB object changes, the more quickly you'll be able to deliver business value.
+
+7) Most logs are at the debug level
 
    You don't want to crowd out the logs. There is value in delineating between debug, info, warn, etc.
 
