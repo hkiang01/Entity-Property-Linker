@@ -106,6 +106,7 @@ class Entities extends React.Component {
    * - the selected entity
    * - the query used to filter the entities list
    * - the entities from the api
+   * - whether the user can click the 'Add' button
    */
   state = {
     selectedEntity: null,
