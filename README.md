@@ -51,6 +51,10 @@ Priority number 1: enable the delivery business value
 
    A rule of thumb: the more popular a software library is, the more support it has. The more support it has, the easier it is to find solutions to common problems that you'll run into when trying to develop a feature. These learned lessons are taken into account and implemented in the corresponding library to make it easier to use. Libraries that are easier to use will help you deliver business value faster.
 
+10. Use auto-formatting
+
+    Maintainable software enables the quick delivery of business value. Auto-linting takes the effort out of maintaining a readable codebase, making it easy to keep the code readable. Readable code is maintainable code. Maintainable code translates into enabling the delivery of business value quickly.
+
 ## Prerequisites
 
 - [docker](https://docs.docker.com/install/)
