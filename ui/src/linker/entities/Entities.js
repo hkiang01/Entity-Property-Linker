@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -199,26 +200,34 @@ class Entities extends React.Component {
   /**
    * Toggles the selection of an entity
    * If the entity is already selected, clear it,
-   * otherwise, check it
+   * otherwise, check it.
+   *
+   * Also notifies the selectedEntityListener, if defined, of the newly-selected Entity
    */
   handleSelection = selection => {
-    const id = selection.currentTarget.value;
-    if (this.state.selectedEntity && this.state.selectedEntity.id === id) {
-      this.setState({ selectedEntity: null }, () => {
-        console.debug(this.state);
-      });
-    } else {
-      const matchingEntity = this.state.entities.filter(
-        entity => entity.id === id
-      )[0];
-      this.setState({ selectedEntity: matchingEntity }, () => {
-        console.debug(this.state);
-      });
-    }
+    const selectionId = selection.currentTarget.value;
+    const alreadySelected = !!(
+      this.state.selectedEntity && this.state.selectedEntity.id === selectionId
+    );
+
+    console.debug("handleSelection selection", selection);
+    console.debug("handleSelection selectionId", selectionId);
+    console.debug("handleSelection alreadySelected", alreadySelected);
+
+    const updatedSelection = alreadySelected
+      ? null
+      : this.state.entities.filter(entity => entity.id === selectionId)[0];
+
+    this.setState({ selectedEntity: updatedSelection }, () => {
+      if (this.props.selectedEntityListener) {
+        this.props.selectedEntityListener(updatedSelection);
+      }
+      console.debug(this.state);
+    });
   };
 
   /**
-   * Generates entities, each with:
+   * Generates a property list item with:
    * - A radio button
    * - Some text
    * - A delete icon
@@ -305,5 +314,9 @@ class Entities extends React.Component {
     );
   }
 }
+
+Entities.propTypes = {
+  selectedEntityListener: PropTypes.func
+};
 
 export default withStyles(styles)(Entities);

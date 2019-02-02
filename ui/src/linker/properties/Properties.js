@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -198,28 +199,34 @@ class Properties extends React.Component {
   };
 
   /**
-   * Toggles the selection of an Property
+   * Toggles the selection of a Property
    * If the Property is already selected, clear it,
-   * otherwise, check it
+   * otherwise, check it.
+   *
+   * Also notifies the selectedPropertyListener, if defined, of the newly-selected Property
    */
   handleSelection = selection => {
-    const id = selection.currentTarget.value;
-    if (this.state.selectedProperty && this.state.selectedProperty.id === id) {
-      this.setState({ selectedProperty: null }, () => {
-        console.debug(this.state);
-      });
-    } else {
-      const matchingProperty = this.state.properties.filter(
-        property => property.id === id
-      )[0];
-      this.setState({ selectedProperty: matchingProperty }, () => {
-        console.debug(this.state);
-      });
-    }
+    const selectionId = selection.currentTarget.value;
+    const alreadySelected =
+      this.state.selectedProperty &&
+      this.state.selectedProperty.id === selectionId;
+
+    const updatedSelection = alreadySelected
+      ? null
+      : this.state.properties.filter(
+          property => property.id === selectionId
+        )[0];
+
+    this.setState({ selectedProperty: updatedSelection }, () => {
+      if (this.props.selectedPropertyListener) {
+        this.props.selectedPropertyListener(updatedSelection);
+      }
+      console.debug(this.state);
+    });
   };
 
   /**
-   * Generates properties, each with:
+   * Generates a Property list item with:
    * - A radio button
    * - Some text
    * - A delete icon
@@ -308,5 +315,9 @@ class Properties extends React.Component {
     );
   }
 }
+
+Properties.propTypes = {
+  selectedPropertyListener: PropTypes.func
+};
 
 export default withStyles(styles)(Properties);
