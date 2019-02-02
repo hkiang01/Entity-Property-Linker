@@ -35,7 +35,7 @@ Priority number 1: enable the delivery business value
 
 7) Most logs are at the debug level
 
-   You don't want to crowd out the logs. There is value in delineating between debug, info, warn, etc.
+   You don't want to crowd out the logs. There is value in delineating between debug, info, warn, etc. Log levels allow you to filter for the logs you care about quickly, enabling you to deliver business value faster.
 
 ## Prerequisites
 
