@@ -1,11 +1,16 @@
 "use strict";
 
-// Server
+// Postgres connection
+const { Client } = require("pg");
+const client = new Client();
+client.connect();
+
+// API server
 const express = require("express");
 const app = express();
 const port = process.env.PORT;
 
-// allow localhost
+// allow basic CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -18,11 +23,6 @@ app.use(function(req, res, next) {
 // enable the API to parse application/json
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-
-// Postgres connection
-const { Client } = require("pg");
-const client = new Client();
-client.connect();
 
 // a simple hello world route
 app.get("/", function(req, res) {
@@ -63,6 +63,8 @@ app.post("/entity", function(req, res) {
 });
 
 // delete entity
+const cors = require("cors");
+app.options("/entity", cors()); // enable pre-flight request for DELETE request
 app.delete("/entity", function(req, res) {
   console.log("delete '/entity' from", req.ip);
   const { id, name } = req.body;
