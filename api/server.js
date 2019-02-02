@@ -135,4 +135,36 @@ app.delete("/property", function(req, res) {
     });
 });
 
+// get links
+app.get("/link", function(req, res) {
+  console.log("get '/link' from", req.ip);
+  client
+    .query("SELECT * FROM link")
+    .then(results => res.status(200).json(results.rows))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
+});
+
+// add new link
+app.post("/link", function(req, res) {
+  console.log("post '/link' from", req.ip);
+  const { entity_id, property_id } = req.body;
+  const values = [entity_id, property_id];
+  const text =
+    "INSERT INTO entity(entity_it, property_id) VALUES($1, $2) RETURNING *";
+  client
+    .query(text, values)
+    .then(result => res.status(200).send(result.rows[0]))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
+});
+
 app.listen(port, () => console.log(`API listening on port ${port}`));
