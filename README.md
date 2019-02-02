@@ -43,9 +43,9 @@ Priority number 1: enable the delivery business value
 
    Writing tests take time. Only write tests that directly translate into one of the necessary capabilities of the product from a _business_ perspective, not a _technical_ perspective. This is also why you should organize your components according to features as opposed to component types.
 
-   For example: I'll write a test that ensures that you can link an `Entity` with a `Property`, as that's a necessary capability of the product. However, it's not necessary to write a test to make sure that a "Link" button changes color when pressed.
+   The way I like to think of what is necessary and what isn't is by asking myself: "Does this operation affect what's stored in the database?". The whole point of computing is, after all, to modify the state of your store. Most front-end applications are CRUD (Create, Read Update, Delete) applications. In other words, they're user-friendly interfaces to a database.
 
-   The way I like to think of what is necessary and what isn't is by asking myself: "Does this operation affect what's stored in the database?". The answer as to whether a test is necessary is often the same. The whole point of computing is, after all, to modify the state of your store. In this case, your store is the database.
+   For example: I'll write a test that ensures that you can link an `Entity` with a `Property`, as that's a necessary capability of the product, and translates to a change of state of the database. However, it's not necessary to write a test to make sure that a "Link" button changes color when pressed, as that is neither a business-critical function of the application, nor does it translate to a database change.
 
 9. Use the most popular component libraries that satisfy business requirements.
 
