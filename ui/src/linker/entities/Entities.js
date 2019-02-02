@@ -8,7 +8,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Checkbox from "@material-ui/core/Checkbox";
+import Radio from "@material-ui/core/Radio";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
@@ -96,6 +96,40 @@ class Entities extends React.Component {
   };
 
   /**
+   * Adds new entity to database with name present in 'query',
+   * then adds the newly created entity to the entity list.
+   * Finally, clears the 'query' (both state and search bar value)
+   * so the eneity list can be displayed in full.
+   */
+  handleAdd = event => {
+    const newEntityName = document.getElementById("entity-query").value;
+    addEntity(newEntityName).then(response => {
+      console.debug("handlAdd repsonse", response);
+      this.setState(
+        (prevState, props) => {
+          let entities = prevState.entities;
+          entities.push(new Entity(response.id, response.name));
+          return {
+            query: "",
+            entities: entities
+          };
+        },
+        () => {
+          document.getElementById("entity-query").value = "";
+        }
+      );
+    });
+  };
+
+  /**
+   * Deletes the selected entity from the database
+   */
+  handleDelete = event => {
+    console.debug("handleDelete state", this.state.selectedEntity);
+    console.debug("handleDelete event target", event.target);
+  };
+
+  /**
    * Gets the entiites from the database,
    */
   componentDidMount() {
@@ -132,7 +166,7 @@ class Entities extends React.Component {
 
   /**
    * Toggles the selection of an entity
-   * If the checkbox is already checked, clear it,
+   * If the entity is already selected, clear it,
    * otherwise, check it
    */
   handleSelection = selection => {
@@ -152,39 +186,8 @@ class Entities extends React.Component {
   };
 
   /**
-   * Adds new entity to database with name present in 'query',
-   * then adds the newly created entity to the entity list.
-   * Finally, clears the 'query' (both state and search bar value)
-   * so the eneity list can be displayed in full.
-   */
-  handleAdd = event => {
-    const newEntityName = document.getElementById("entity-query").value;
-    addEntity(newEntityName).then(response => {
-      console.debug("handlAdd repsonse", response);
-      this.setState(
-        (prevState, props) => {
-          let entities = prevState.entities;
-          entities.push(new Entity(response.id, response.name));
-          return {
-            query: "",
-            entities: entities
-          };
-        },
-        () => {
-          document.getElementById("entity-query").value = "";
-        }
-      );
-    });
-  };
-
-  handleDelete = event => {
-    console.debug("handleDelete state", this.state.selectedEntity);
-    console.debug("handleDelete event target", event.target);
-  };
-
-  /**
    * Generates entities, each with:
-   * - A checkbox
+   * - A radio button
    * - Some text
    * - A delete icon
    *
@@ -201,7 +204,7 @@ class Entities extends React.Component {
       entityObj =>
         (!this.state.query || entityObj.name.includes(this.state.query)) && (
           <ListItem hidden={false} key={entityObj.id}>
-            <Checkbox
+            <Radio
               checked={this.state.selectedEntity === entityObj}
               onChange={this.handleSelection}
               value={entityObj.id}
