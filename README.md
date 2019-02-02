@@ -45,6 +45,8 @@ Priority number 1: enable the delivery business value
 
    For example: I'll write a test that ensures that you can link an `Entity` with a `Property`, as that's a necessary capability of the product. However, it's not necessary to write a test to make sure that a "Link" button changes color when pressed.
 
+   The way I like to think of what is necessary and what isn't is by asking myself: "Does this operation affect what's stored in the database?". The answer as to whether a test is necessary is often the same. The whole point of computing is, after all, to modify the state of your store. In this case, your store is the database.
+
 9. Use the most popular component libraries that satisfy business requirements.
 
    Unless absolutely necessary (e.g., legal data privacy regulations), don't use custom libraries, as it will be more difficult for you to find support for issues you run into, and therefore making it more difficult for you to deliver business value.
