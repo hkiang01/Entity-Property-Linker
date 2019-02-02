@@ -23,6 +23,8 @@ Priority number 1: enable the delivery business value
 
    This makes it easier to focus on features that deliver business value vs getting lost in the technical details of how to implement business features. This enables you to deliver business value faster.
 
+   This design choice may incur code duplication, but managing components by component type does not enable to you deliver business value as quickly, e.g., in the case of 2 like concepts that are managed by a single component type all of a sudden diverging from each other. The UI/UX professionals that maintain popular component libraries have already figured out all of the reusable components necessary in a UI project. If you're writing a component library, organize components by component type. If you're writing a business application, organize components by feature.
+
 5. API calls build into React UI components.
 
    The whole point of components is that they're reusable. There should be as few tightly coupled relationships between files as possible. You should be able to move around a given `.js` file containing a component at will. This enables agility and enables you to deliver business value faster.
