@@ -102,7 +102,7 @@ class Entities extends React.Component {
     getEntities()
       .then(res => {
         this.setState({ entities: res }, () => {
-          console.debug(this.state);
+          console.debug("componentDidMount state", this.state);
         });
       })
       .catch(err => console.error(err));
