@@ -33,9 +33,21 @@ Priority number 1: enable the delivery business value
 
    Since the API calls are in the same file as everything else for a given component (see #5), it's easy to change this structure as needed, as you only need to modify a single file in the UI. The fewer files you need to change when the schema for a DB object changes, the more quickly you'll be able to deliver business value.
 
-7) Most logs are at the debug level
+7. Most logs are at the debug level
 
    You don't want to crowd out the logs. There is value in delineating between debug, info, warn, etc. Log levels allow you to filter for the logs you care about quickly, enabling you to deliver business value faster.
+
+8. Don't write more tests than necessary
+
+   Writing tests take time. Only write tests that directly translate into one of the necessary capabilities of the product from a _business_ perspective, not a _technical_ perspective. This is also why you should organize your components according to features as opposed to component types.
+
+   For example: I'll write a test that ensures that you can link an `Entity` with a `Property`, as that's a necessary capability of the product. However, it's not necessary to write a test to make sure that a "Link" button changes color when pressed.
+
+9. Use the most popular component libraries that satisfy business requirements.
+
+   Unless absolutely necessary (e.g., legal data privacy regulations), don't use custom libraries, as it will be more difficult for you to find support for issues you run into, and therefore making it more difficult for you to deliver business value.
+
+   A rule of thumb: the more popular a software library is, the more support it has. The more support it has, the easier it is to find solutions to common problems that you'll run into when trying to develop a feature. These learned lessons are taken into account and implemented in the corresponding library to make it easier to use. Libraries that are easier to use will help you deliver business value faster.
 
 ## Prerequisites
 
