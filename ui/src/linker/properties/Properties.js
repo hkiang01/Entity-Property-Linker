@@ -179,7 +179,7 @@ class Properties extends React.Component {
    * Filters the list of properties
    * Sets the condition for the add button to be enabled. It should be enabled if:
    * - 'query' is empty, or
-   * - there exists no Property in the list whose name contains the 'query'
+   * - there exists no Property in the list whose name equals the 'query'
    */
   handleSearch = event => {
     const queryValue = event.target.value;
@@ -188,9 +188,7 @@ class Properties extends React.Component {
         query: queryValue,
         enableAddButton: !!(
           queryValue &&
-          !this.state.properties.find(property =>
-            property.name.includes(queryValue)
-          )
+          !this.state.properties.find(property => property.name === queryValue)
         )
       },
       () => {
