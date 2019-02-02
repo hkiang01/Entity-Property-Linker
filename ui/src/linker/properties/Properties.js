@@ -1,136 +1,305 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Radio from '@material-ui/core/Radio';
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
+import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Radio from "@material-ui/core/Radio";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import * as apiConfig from "../../../config/api.json";
 
+/**
+ * Styles named after their respective components.
+ * For example, typography is for the <Typography /> component
+ */
 const styles = theme => ({
   root: {
-    width: '100%',
-    padding: theme.spacing.unit * 2
+    width: "100%",
+    padding: theme.spacing.unit * 2,
+    dense: true
   },
   typography: {
     marginLeft: 10,
     marginBottom: 20
   },
   paper: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2
   },
   input: {
     marginLeft: 8,
-    flex: 1,
+    flex: 1
   }
 });
+
+/**
+ * The baseUrl for API requests
+ */
+const endpoint = apiConfig.dev.endpoint;
+
+/**
+ * An Property corresponding to the DB's `Property` table
+ */
+function Property(id, name) {
+  this.id = id;
+  this.name = name;
+}
+
+/**
+ * Gets properties from the database
+ */
+const getProperties = async () => {
+  const response = await fetch(endpoint + "/property");
+  const body = await response.json();
+  console.debug("getProperties response", response);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
+};
+
+/**
+ * Adds a Property to the database
+ */
+const addProperty = async name => {
+  const data = JSON.stringify({ name: name });
+  const response = await fetch(endpoint + "/property", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: data
+  });
+  const body = await response.json();
+  console.debug("addProperty response", response);
+  console.debug("addProperty body", body);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
+};
+
+/**
+ * Delets Properties from the database
+ */
+const deleteProperty = async property => {
+  const data = JSON.stringify({ id: property.id, name: property.name });
+  const response = await fetch(endpoint + "/property", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: data
+  });
+  const body = await response.json();
+  console.debug("deleteProperty response", response);
+  console.debug("deleteProperty body", body);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
+};
 
 class Properties extends React.Component {
   /**
    * Used to store
-   * - the Properties from the API
-   * - the selected property
+   * - the selected Property
+   * - the query used to filter the properties list
+   * - the properties from the api
    */
   state = {
-    selectedValue: null,
-    values: ["0", "1", "2"]
+    selectedProperty: null,
+    query: null,
+    properties: [],
+    enableAddButton: false
   };
 
   /**
-   * Filters the list of Properties
+   * Adds new Property to database with name present in 'query',
+   * then adds the newly created Property to the Property list.
+   *
+   * It then disables the add button, as a user would not intend to add
+   * an Property with an empty name.
+   *
+   * Finally, it clears the 'query' (both state and search bar value)
+   * so the Property list can be displayed in full.
    */
-  handleSearch = name => event => {
-    this.setState({
-      [name]: event.target.value,
+  handleAdd = event => {
+    const newPropertyName = document.getElementById("property-query").value;
+    addProperty(newPropertyName).then(response => {
+      this.setState(
+        (prevState, props) => {
+          let properties = prevState.properties;
+          properties.push(new Property(response.id, response.name));
+          return {
+            query: "",
+            properties: properties,
+            enableAddButton: false
+          };
+        },
+        () => {
+          document.getElementById("property-query").value = "";
+        }
+      );
     });
   };
 
   /**
-   * Toggles the selection of an property
+   * Deletes the selected Property from the database,
+   * Removes the selected Property from the list of properties,
+   * then sets the selected Property to null.
    */
-  handleSelection= event => {
-    this.setState(({
-      selectedValue: event.target.value
-    }), () => {
-      console.debug(this.state);
+  handleDelete = event => {
+    const propertyToDelete = this.state.selectedProperty;
+    deleteProperty(propertyToDelete).then(response => {
+      this.setState((prevState, props) => {
+        let properties = prevState.properties;
+        properties = properties.filter(
+          property => property !== propertyToDelete
+        );
+        return { properties: properties };
+      });
     });
+  };
+
+  /**
+   * Gets the entiites from the database,
+   */
+  componentDidMount() {
+    getProperties()
+      .then(res => {
+        this.setState({ properties: res }, () => {
+          console.debug("componentDidMount state", this.state);
+        });
+      })
+      .catch(err => console.error(err));
   }
 
-  handleDeletion = event => {
-    console.debug("deletion", this.state.selectedValue);
-  }
+  /**
+   * Filters the list of properties
+   * Sets the condition for the add button to be enabled. It should be enabled if:
+   * - 'query' is empty, or
+   * - there exists no Property in the list whose name contains the 'query'
+   */
+  handleSearch = event => {
+    const queryValue = event.target.value;
+    this.setState(
+      {
+        query: queryValue,
+        enableAddButton: !!(
+          queryValue &&
+          !this.state.properties.find(property =>
+            property.name.includes(queryValue)
+          )
+        )
+      },
+      () => {
+        console.debug(this.state);
+      }
+    );
+  };
 
- /**
-   * Generates Properties, each with:
+  /**
+   * Toggles the selection of an Property
+   * If the Property is already selected, clear it,
+   * otherwise, check it
+   */
+  handleSelection = selection => {
+    const id = selection.currentTarget.value;
+    if (this.state.selectedProperty && this.state.selectedProperty.id === id) {
+      this.setState({ selectedProperty: null }, () => {
+        console.debug(this.state);
+      });
+    } else {
+      const matchingProperty = this.state.properties.filter(
+        property => property.id === id
+      )[0];
+      this.setState({ selectedProperty: matchingProperty }, () => {
+        console.debug(this.state);
+      });
+    }
+  };
+
+  /**
+   * Generates properties, each with:
    * - A radio button
    * - Some text
    * - A delete icon
-   * 
+   *
    * Also adds handlers which enable:
-   * - Selecting an property
-   * - Deleting an property
+   * - Selecting an Property
+   * - Deleting an Property
+   *
+   * Finally, the Property is visible only if:
+   * - the search box is empty, or
+   * - the search box's query value is contained within the Property's name
    */
-  generateProperties(values) {
-    return values.map(value => (
-      <ListItem key={value} >
-        <Radio
-          checked={this.state.selectedValue === value}
-          onChange={this.handleSelection}
-          value={value}
-        />
-        <ListItemText
-          primary={`Line item ${value}`}
-        />
-        <ListItemSecondaryAction>
-          <IconButton
-            aria-label="Delete"
-            onClick={this.handleDeletion}
-            value={value}
-            disabled={this.state.selectedValue !== value}
-          >
-            <DeleteIcon
+  generateProperties(propertyObjs) {
+    return propertyObjs.map(
+      propertyObj =>
+        (!this.state.query || propertyObj.name.includes(this.state.query)) && (
+          <ListItem hidden={false} key={propertyObj.id}>
+            <Radio
+              checked={this.state.selectedProperty === propertyObj}
+              onChange={this.handleSelection}
+              value={propertyObj.id}
             />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    ))
+            <ListItemText primary={propertyObj.name} />
+            <ListItemSecondaryAction>
+              <IconButton
+                aria-label="Delete"
+                onClick={this.handleDelete}
+                value={propertyObj.name}
+                disabled={this.state.selectedProperty !== propertyObj}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        )
+    );
   }
 
   /**
    * Generates a paper with:
    * - A title
    * - A search box with add button
-   * - A list of Properties generated by generateProperties()
+   * - A list of properties generated by generateProperties()
    */
   render() {
     const { classes } = this.props;
     return (
       <Paper className={classes.paper}>
-        <Typography className={classes.typography} variant='h4' gutterBottom align="left">
-          Properties
+        <Typography
+          className={classes.typography}
+          variant="h4"
+          gutterBottom
+          align="left"
+        >
+          properties
         </Typography>
         <Grid container spacing={16}>
           <IconButton aria-label="Search">
             <SearchIcon />
           </IconButton>
-          <InputBase className={classes.input}
-            placeholder="Search Properties"
-            onChange={this.handleSearch('query')}
+          <InputBase
+            id="property-query"
+            className={classes.input}
+            placeholder="Search properties"
+            onChange={this.handleSearch}
           />
-          <Button variant="contained" color="secondary" disabled>
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={!this.state.enableAddButton}
+            onClick={this.handleAdd}
+          >
             Add
           </Button>
         </Grid>
         <Grid container spacing={16}>
-          <List className={classes.root}>
-            {this.generateProperties(this.state.values)}
+          <List id="properties-list" className={classes.root}>
+            {this.generateProperties(this.state.properties)}
           </List>
         </Grid>
       </Paper>
