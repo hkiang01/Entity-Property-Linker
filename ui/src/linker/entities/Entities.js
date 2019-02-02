@@ -39,7 +39,12 @@ const styles = theme => ({
 });
 
 /**
- * An entity corresponding to the DB's `entity` table
+ * The baseUrl for API requests
+ */
+const endpoint = apiConfig.dev.endpoint;
+
+/**
+ * An Entity corresponding to the DB's `entity` table
  */
 function Entity(id, name) {
   this.id = id;
@@ -47,12 +52,7 @@ function Entity(id, name) {
 }
 
 /**
- * The baseUrl for API requests
- */
-const endpoint = apiConfig.dev.endpoint;
-
-/**
- * Gets entities from API
+ * Gets entities from the database
  */
 const getEntities = async () => {
   const response = await fetch(endpoint + "/entity");
@@ -81,6 +81,25 @@ const addEntity = async name => {
   return body;
 };
 
+/**
+ * Delets entities from the database
+ */
+const deleteEntity = async entity => {
+  const data = JSON.stringify({ id: entity.id, name: entity.name });
+  const response = await fetch(endpoint + "/entity", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: data
+  });
+  const body = await response.json();
+  console.debug("deleteEntity response", response);
+  console.debug("deleteEntity body", body);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
+};
+
 class Entities extends React.Component {
   /**
    * Used to store
@@ -104,7 +123,6 @@ class Entities extends React.Component {
   handleAdd = event => {
     const newEntityName = document.getElementById("entity-query").value;
     addEntity(newEntityName).then(response => {
-      console.debug("handlAdd repsonse", response);
       this.setState(
         (prevState, props) => {
           let entities = prevState.entities;
@@ -122,11 +140,19 @@ class Entities extends React.Component {
   };
 
   /**
-   * Deletes the selected entity from the database
+   * Deletes the selected entity from the database,
+   * Removes the selected entity from the list of Entities,
+   * then sets the selected entity to null.
    */
   handleDelete = event => {
-    console.debug("handleDelete state", this.state.selectedEntity);
-    console.debug("handleDelete event target", event.target);
+    const entityToDelete = this.state.selectedEntity;
+    deleteEntity(entityToDelete).then(response => {
+      this.setState((prevState, props) => {
+        let entities = prevState.entities;
+        entities = entities.filter(entity => entity !== entityToDelete);
+        return { entities: entities };
+      });
+    });
   };
 
   /**
@@ -215,7 +241,7 @@ class Entities extends React.Component {
                 aria-label="Delete"
                 onClick={this.handleDelete}
                 value={entityObj.name}
-                disabled={this.state.selectedEntity !== entityObj.name}
+                disabled={this.state.selectedEntity !== entityObj}
               >
                 <DeleteIcon />
               </IconButton>

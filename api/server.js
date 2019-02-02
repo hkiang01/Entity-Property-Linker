@@ -1,7 +1,7 @@
 "use strict";
 
 // Server
-import express from "express";
+const express = require("express");
 const app = express();
 const port = process.env.PORT;
 
@@ -16,11 +16,11 @@ app.use(function(req, res, next) {
 });
 
 // enable the API to parse application/json
-import { json } from "body-parser";
-app.use(json());
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
 
 // Postgres connection
-import { Client } from "pg";
+const { Client } = require("pg");
 const client = new Client();
 client.connect();
 
