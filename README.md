@@ -27,7 +27,11 @@ Priority number 1: enable the delivery business value
 
    The whole point of components is that they're reusable. There should be as few tightly coupled relationships between files as possible. You should be able to move around a given `.js` file containing a component at will. This enables agility and enables you to deliver business value faster.
 
-6. Most logs are at the debug level
+6. JSON objects returned from API should mirror their corresponding DB schemas.
+
+   This removes ambiguity in dealing with JSON objects that represent database objects, and respect the database schema as the single source of truth for their structure. The less ambiguity, the more certainty, and the more likely you're able to deliver business value quickly.
+
+7. Most logs are at the debug level
 
    You don't want to crowd out the logs. There is value in delineating between debug, info, warn, etc.
 
