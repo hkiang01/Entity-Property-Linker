@@ -6,6 +6,7 @@ const client = new Client();
 client.connect();
 
 // API server
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const port = process.env.PORT;
@@ -65,7 +66,6 @@ app.post("/entity", function(req, res) {
 });
 
 // delete entity
-const cors = require("cors");
 app.options("/entity", cors()); // enable pre-flight request for DELETE request
 app.delete("/entity", function(req, res) {
   console.log("delete '/entity' from", req.ip);
@@ -106,6 +106,24 @@ app.post("/property", function(req, res) {
   const values = [name];
   const text =
     "INSERT INTO property(id, name) VALUES(uuid_generate_v4(), $1) RETURNING *";
+  client
+    .query(text, values)
+    .then(result => res.status(200).send(result.rows[0]))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
+});
+
+// delete property
+app.options("/property", cors()); // enable pre-flight request for DELETE request
+app.delete("/property", function(req, res) {
+  console.log("delete '/property' from", req.ip);
+  const { id, name } = req.body;
+  const values = [id, name];
+  const text = "DELETE FROM property WHERE id=$1 AND name=$2 RETURNING *";
   client
     .query(text, values)
     .then(result => res.status(200).send(result.rows[0]))
