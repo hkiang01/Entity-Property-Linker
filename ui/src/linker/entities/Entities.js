@@ -63,12 +63,6 @@ const getEntities = async () => {
 };
 
 /**
- * Gets entities where the entityIds match entity.id in the database
- * @param {string[]} entityIds - A list containing ids of entities to get
- */
-const getEntitiesOnId = async entityIds => {};
-
-/**
  * Adds an entity to the database by name
  */
 const addEntity = async name => {
@@ -237,29 +231,29 @@ class Entities extends React.Component {
    * - the search box is empty, or
    * - the search box's query value is contained within the entity's name
    */
-  generateEntities(entityObjs) {
-    return entityObjs.map(
-      entityObj =>
-        (!this.state.query || entityObj.name.includes(this.state.query)) && (
-          <ListItem hidden={false} key={entityObj.id}>
-            <Radio
-              checked={this.state.selectedEntity === entityObj}
-              onChange={this.handleSelection}
-              value={entityObj.id}
-            />
-            <ListItemText primary={entityObj.name} />
-            <ListItemSecondaryAction>
-              <IconButton
-                aria-label="Delete"
-                onClick={this.handleDelete}
-                value={entityObj.name}
-                disabled={this.state.selectedEntity !== entityObj}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        )
+  generateEntityListItem(entityObj) {
+    return (
+      <ListItem
+        hidden={!this.state.query || entityObj.name.includes(this.state.query)}
+        key={entityObj.id}
+      >
+        <Radio
+          checked={this.state.selectedEntity === entityObj}
+          onChange={this.handleSelection}
+          value={entityObj.id}
+        />
+        <ListItemText primary={entityObj.name} />
+        <ListItemSecondaryAction>
+          <IconButton
+            aria-label="Delete"
+            onClick={this.handleDelete}
+            value={entityObj.name}
+            disabled={this.state.selectedEntity !== entityObj}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
     );
   }
 
@@ -302,7 +296,9 @@ class Entities extends React.Component {
         </Grid>
         <Grid container spacing={16}>
           <List id="entities-list" className={classes.root}>
-            {this.generateEntities(this.state.entities)}
+            {this.state.entities.map(entity =>
+              this.generateEntityListItem(entity)
+            )}
           </List>
         </Grid>
       </Paper>

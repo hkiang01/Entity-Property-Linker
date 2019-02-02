@@ -232,29 +232,31 @@ class Properties extends React.Component {
    * - the search box is empty, or
    * - the search box's query value is contained within the Property's name
    */
-  generateProperties(propertyObjs) {
-    return propertyObjs.map(
-      propertyObj =>
-        (!this.state.query || propertyObj.name.includes(this.state.query)) && (
-          <ListItem hidden={false} key={propertyObj.id}>
-            <Radio
-              checked={this.state.selectedProperty === propertyObj}
-              onChange={this.handleSelection}
-              value={propertyObj.id}
-            />
-            <ListItemText primary={propertyObj.name} />
-            <ListItemSecondaryAction>
-              <IconButton
-                aria-label="Delete"
-                onClick={this.handleDelete}
-                value={propertyObj.name}
-                disabled={this.state.selectedProperty !== propertyObj}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        )
+  generatePropertyListItem(propertyObj) {
+    return (
+      <ListItem
+        hidden={
+          !this.state.query || propertyObj.name.includes(this.state.query)
+        }
+        key={propertyObj.id}
+      >
+        <Radio
+          checked={this.state.selectedProperty === propertyObj}
+          onChange={this.handleSelection}
+          value={propertyObj.id}
+        />
+        <ListItemText primary={propertyObj.name} />
+        <ListItemSecondaryAction>
+          <IconButton
+            aria-label="Delete"
+            onClick={this.handleDelete}
+            value={propertyObj.name}
+            disabled={this.state.selectedProperty !== propertyObj}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
     );
   }
 
@@ -297,7 +299,9 @@ class Properties extends React.Component {
         </Grid>
         <Grid container spacing={16}>
           <List id="properties-list" className={classes.root}>
-            {this.generateProperties(this.state.properties)}
+            {this.state.properties.map(entity =>
+              this.generatePropertyListItem(entity)
+            )}
           </List>
         </Grid>
       </Paper>
