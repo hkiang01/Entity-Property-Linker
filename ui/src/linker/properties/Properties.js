@@ -276,7 +276,7 @@ class Properties extends React.Component {
           gutterBottom
           align="left"
         >
-          properties
+          Properties
         </Typography>
         <Grid container spacing={16}>
           <IconButton aria-label="Search">

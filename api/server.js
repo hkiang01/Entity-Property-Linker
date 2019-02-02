@@ -30,6 +30,8 @@ app.get("/", function(req, res) {
   res.send("hello world");
 });
 
+// TODO: put entity routes in separate file
+
 // get all entities
 app.get("/entity", function(req, res) {
   console.log("get '/entity' from", req.ip);
@@ -81,12 +83,29 @@ app.delete("/entity", function(req, res) {
     });
 });
 
-// insert new property for a given entity
-app.post("/field/:entityId", function(req, res) {
-  const { name, entityId, sampleValue } = req.params.entityId;
-  const values = [name, entityId, sampleValue];
+// TODO: put property routes in separate file
+
+// get all properties
+app.get("/property", function(req, res) {
+  console.log("get '/property' from", req.ip);
+  client
+    .query("SELECT * FROM property")
+    .then(results => res.status(200).json(results.rows))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
+});
+
+// insert new property by name and sample value
+app.post("/property", function(req, res) {
+  console.log("post '/property' from", req.ip);
+  const { name } = req.body;
+  const values = [name];
   const text =
-    "INSERT INTO property (id, name, entity_id, sample_value) VALUES (uuid_generate_v4(), $1, $2, $3) RETURNING *";
+    "INSERT INTO property(id, name) VALUES(uuid_generate_v4(), $1) RETURNING *";
   client
     .query(text, values)
     .then(result => res.status(200).send(result.rows[0]))
@@ -104,6 +123,23 @@ app.get("/field/:entityId", function(req, res) {
   client
     .query("SELECT * FROM property WHERE entity_id = $1", [entityId])
     .then(results => res.status(200).json(results.rows))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
+});
+
+// insert new property for a given entity
+app.post("/field/:entityId", function(req, res) {
+  const { name, entityId, sampleValue } = req.params.entityId;
+  const values = [name, entityId, sampleValue];
+  const text =
+    "INSERT INTO property (id, name, entity_id, sample_value) VALUES (uuid_generate_v4(), $1, $2, $3) RETURNING *";
+  client
+    .query(text, values)
+    .then(result => res.status(200).send(result.rows[0]))
     .catch(err => {
       console.error(err.stack);
       res.status(500).send({
