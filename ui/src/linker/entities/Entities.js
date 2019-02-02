@@ -38,6 +38,9 @@ const styles = theme => ({
   }
 });
 
+/**
+ * An entity corresponding to the DB's `entity` table
+ */
 function Entity(id, name) {
   this.id = id;
   this.name = name;
@@ -86,7 +89,7 @@ class Entities extends React.Component {
    * - the entities from the api
    */
   state = {
-    selectedValue: null,
+    selectedEntity: null,
     query: null,
     entities: [],
     enableAddButton: false
@@ -98,14 +101,9 @@ class Entities extends React.Component {
   componentDidMount() {
     getEntities()
       .then(res => {
-        this.setState(
-          {
-            entities: res
-          },
-          () => {
-            console.debug(this.state);
-          }
-        );
+        this.setState({ entities: res }, () => {
+          console.debug(this.state);
+        });
       })
       .catch(err => console.error(err));
   }
@@ -114,7 +112,7 @@ class Entities extends React.Component {
    * Filters the list of entities
    * Sets the condition for the add button to be enabled. It should be enabled if:
    * - 'query' is empty, or
-   * - there exists no entity whose name contains the 'query'
+   * - there exists no entity in the list whose name contains the 'query'
    */
   handleSearch = event => {
     const queryValue = event.target.value;
@@ -134,29 +132,22 @@ class Entities extends React.Component {
 
   /**
    * Toggles the selection of an entity
-   * If the selection is the same as what is selected,
-   * set the selected entity to null
+   * If the checkbox is already checked, clear it,
+   * otherwise, check it
    */
-  handleSelection = (event, checked) => {
-    const selectionValue = event.target.value;
-    if (this.state.selectedValue === selectionValue) {
-      this.setState(
-        {
-          selectedValue: null
-        },
-        () => {
-          console.debug(this.state);
-        }
-      );
+  handleSelection = selection => {
+    const id = selection.currentTarget.value;
+    if (this.state.selectedEntity && this.state.selectedEntity.id === id) {
+      this.setState({ selectedEntity: null }, () => {
+        console.debug(this.state);
+      });
     } else {
-      this.setState(
-        {
-          selectedValue: event.target.value
-        },
-        () => {
-          console.debug(this.state);
-        }
-      );
+      const matchingEntity = this.state.entities.filter(
+        entity => entity.id === id
+      )[0];
+      this.setState({ selectedEntity: matchingEntity }, () => {
+        console.debug(this.state);
+      });
     }
   };
 
@@ -186,8 +177,9 @@ class Entities extends React.Component {
     });
   };
 
-  handleDeletion = event => {
-    console.debug("deletion", this.state.selectedValue);
+  handleDelete = event => {
+    console.debug("handleDelete state", this.state.selectedEntity);
+    console.debug("handleDelete event target", event.target);
   };
 
   /**
@@ -210,17 +202,17 @@ class Entities extends React.Component {
         (!this.state.query || entityObj.name.includes(this.state.query)) && (
           <ListItem hidden={false} key={entityObj.id}>
             <Checkbox
-              checked={this.state.selectedValue === entityObj.name}
+              checked={this.state.selectedEntity === entityObj}
               onChange={this.handleSelection}
-              value={entityObj.name}
+              value={entityObj.id}
             />
             <ListItemText primary={entityObj.name} />
             <ListItemSecondaryAction>
               <IconButton
                 aria-label="Delete"
-                onClick={this.handleDeletion}
+                onClick={this.handleDelete}
                 value={entityObj.name}
-                disabled={this.state.selectedValue !== entityObj.name}
+                disabled={this.state.selectedEntity !== entityObj.name}
               >
                 <DeleteIcon />
               </IconButton>

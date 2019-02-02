@@ -62,8 +62,21 @@ app.post("/entity", function(req, res) {
     });
 });
 
+// delete entity
 app.delete("/entity", function(req, res) {
   console.log("delete '/entity' from", req.ip);
+  const { id, name } = req.body;
+  const values = [id, name];
+  const text = "DELETE FROM entity WHERE id=$1 AND name=$2 RETURNING *";
+  client
+    .query(text, values)
+    .then(result => res.status(200).send(result.rows[0]))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
 });
 
 // insert new property for a given entity

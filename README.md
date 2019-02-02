@@ -23,7 +23,7 @@ Migrations are handled in the API and use [db-migrate](https://github.com/db-mig
 
 5. API calls build into React UI components.
 
-   The whole point of components is that they're reusable. There should be as few tightly coupled relationships between files as possible.
+   The whole point of components is that they're reusable. There should be as few tightly coupled relationships between files as possible. I should be able to move around a given `.js` file containing a component at will.
 
 ## Prerequisites
 
