@@ -25,7 +25,8 @@ const styles = theme => ({
   root: {
     width: "100%",
     padding: theme.spacing.unit * 2,
-    dense: true
+    dense: true,
+    spacing: 24
   },
   typography: {
     marginLeft: 10,
@@ -39,6 +40,10 @@ const styles = theme => ({
     flex: 1
   },
   listContainer: {
+    width: "100%",
+    padding: theme.spacing.unit * 2,
+    dense: true,
+    spacing: 24,
     marginTop: 15,
     maxHeight: "35vh",
     overflow: "auto"
@@ -154,7 +159,7 @@ class Properties extends React.Component {
     const newPropertyName = document.getElementById("property-query").value;
     addProperty(newPropertyName).then(response => {
       this.setState(
-        (prevState) => {
+        prevState => {
           let properties = prevState.properties;
           properties.push(new Property(response.id, response.name));
           return {
@@ -178,7 +183,7 @@ class Properties extends React.Component {
   handleDelete = () => {
     const propertyToDelete = this.state.selectedProperty;
     deleteProperty(propertyToDelete).then(response => {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let properties = prevState.properties;
         properties = properties.filter(
           property => property !== propertyToDelete
@@ -285,14 +290,14 @@ class Properties extends React.Component {
         >
           Properties
         </Typography>
-        <Grid container spacing={16}>
+        <Grid container className={classes.root}>
           <IconButton aria-label="Search">
             <SearchIcon />
           </IconButton>
           <InputBase
             id="property-query"
             className={classes.input}
-            placeholder="Search properties"
+            placeholder="Search Properties"
             onChange={this.handleSearch}
           />
           <Button
@@ -304,7 +309,7 @@ class Properties extends React.Component {
             Add
           </Button>
         </Grid>
-        <Grid container spacing={16} className={classes.listContainer}>
+        <Grid container className={classes.listContainer}>
           <List id="properties-list" className={classes.root}>
             {this.state.properties.map(entity =>
               this.generatePropertyListItem(entity)

@@ -26,16 +26,13 @@ import { Property } from "./Properties";
  */
 const styles = theme => ({
   root: {
+    spacing: 24,
     width: "100%",
     padding: theme.spacing.unit * 2,
     dense: true
   },
   typography: {
-    marginLeft: 10,
-    marginBottom: 20
-  },
-  paper: {
-    padding: theme.spacing.unit * 2
+    marginLeft: 10
   },
   input: {
     marginLeft: 8,
@@ -45,6 +42,7 @@ const styles = theme => ({
     minWidth: 700
   },
   tableContainer: {
+    spacing: 24,
     marginTop: 15,
     maxHeight: "50vh",
     overflow: "auto"
@@ -98,8 +96,16 @@ const getNamedLinks = async () => {
   return result.then(function(records) {
     console.debug("getNamedLinks records", records);
     return records.map(
-    record => new NamedLink(record.id, record.entity_id, record.entity_name, record.property_id, record.property_name)
-  )});
+      record =>
+        new NamedLink(
+          record.id,
+          record.entity_id,
+          record.entity_name,
+          record.property_id,
+          record.property_name
+        )
+    );
+  });
 };
 
 /**
@@ -160,30 +166,41 @@ class Links extends React.Component {
    * and populates the state
    */
   componentDidMount() {
-    getNamedLinks()
-      .then(namedLinks => {
-        console.debug("componentDidMount namedLinks", namedLinks);
-        this.setState({ namedLinks: namedLinks }, () => {
-          console.debug("componentDidMount state", this.state);
-        });
+    getNamedLinks().then(namedLinks => {
+      console.debug("componentDidMount namedLinks", namedLinks);
+      this.setState({ namedLinks: namedLinks }, () => {
+        console.debug("componentDidMount state", this.state);
       });
+    });
   }
   /**
    * Adds new link to database based on the selected entity and property.
    * Note that the view from which getNamedLinks() pulls from won't be updated yet.
-   * To compensate, this method creates a new NamedLink based on the information that would appear in the named_link view once updated 
+   * To compensate, this method creates a new NamedLink based on the information that would appear in the named_link view once updated
    * This way, the user doesn't have to refresh the page in order to see the newly-added link in the "Links" list
    */
   handleAdd = () => {
-    addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(newLink =>
-        this.setState((prevState) => {
-          let namedLinks = prevState.namedLinks;
-          const newNamedLink = new NamedLink(newLink.id, this.props.selectedEntity.id, this.props.selectedEntity.name,this.props.selectedProperty.id, this.props.selectedProperty.name);
-          namedLinks.push(newNamedLink);
-          return { namedLinks: namedLinks }}, () => {
-          console.debug("handleAdd state", this.state);
-        }));
-  }
+    addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(
+      newLink =>
+        this.setState(
+          prevState => {
+            let namedLinks = prevState.namedLinks;
+            const newNamedLink = new NamedLink(
+              newLink.id,
+              this.props.selectedEntity.id,
+              this.props.selectedEntity.name,
+              this.props.selectedProperty.id,
+              this.props.selectedProperty.name
+            );
+            namedLinks.push(newNamedLink);
+            return { namedLinks: namedLinks };
+          },
+          () => {
+            console.debug("handleAdd state", this.state);
+          }
+        )
+    );
+  };
 
   /**
    * Deletes the selected link from the database,
@@ -192,15 +209,21 @@ class Links extends React.Component {
    */
   handleDelete = () => {
     const namedLinkToDelete = this.state.selectedNamedLink;
-    const linkToDelete = new Link(namedLinkToDelete.id, namedLinkToDelete.entityId, namedLinkToDelete.propertyId);
+    const linkToDelete = new Link(
+      namedLinkToDelete.id,
+      namedLinkToDelete.entityId,
+      namedLinkToDelete.propertyId
+    );
     console.debug("handleDelete");
     console.debug("handleDelete namedLinkToDelete", namedLinkToDelete);
     console.debug("handleDelete linkToDelete", linkToDelete);
 
     deleteLink(linkToDelete).then(() => {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let namedLinks = prevState.namedLinks;
-        namedLinks = namedLinks.filter(namedLink => namedLink !== namedLinkToDelete);
+        namedLinks = namedLinks.filter(
+          namedLink => namedLink !== namedLinkToDelete
+        );
         return { namedLinks: namedLinks, selectedNamedLink: null };
       });
     });
@@ -213,7 +236,7 @@ class Links extends React.Component {
     const queryValue = event.target.value;
     this.setState(
       {
-        query: queryValue,
+        query: queryValue
       },
       () => {
         console.debug("handleSearch state", this.state);
@@ -227,12 +250,14 @@ class Links extends React.Component {
    */
   handleSelection = selection => {
     const selectionId = selection.currentTarget.value;
-    const selectedNamedLink = this.state.namedLinks.find(namedLink => namedLink.id === selectionId);
+    const selectedNamedLink = this.state.namedLinks.find(
+      namedLink => namedLink.id === selectionId
+    );
     console.debug("handleSelection selectedNamedLink", selectedNamedLink);
     this.setState({ selectedNamedLink: selectedNamedLink }, () => {
       console.debug("handleSelection state", this.state);
     });
-  }
+  };
 
   /**
    * A new NamedLink can be added if there exists no NamedLink
@@ -247,8 +272,8 @@ class Links extends React.Component {
       selectedProperty &&
       !this.state.namedLinks.find(
         namedLink =>
-        namedLink.entityId === selectedEntity.id &&
-        namedLink.propertyId === selectedProperty.id
+          namedLink.entityId === selectedEntity.id &&
+          namedLink.propertyId === selectedProperty.id
       )
     );
   }
@@ -302,11 +327,11 @@ class Links extends React.Component {
         <TableCell>{namedLink.propertyName}</TableCell>
         <TableCell>
           <IconButton
-              aria-label="Delete"
-              onClick={this.handleDelete}
-              value={namedLink.id}
-              disabled={this.state.selectedNamedLink !== namedLink}
-            >
+            aria-label="Delete"
+            onClick={this.handleDelete}
+            value={namedLink.id}
+            disabled={this.state.selectedNamedLink !== namedLink}
+          >
             <DeleteIcon />
           </IconButton>
         </TableCell>
@@ -323,7 +348,7 @@ class Links extends React.Component {
     console.debug("Links props", this.props);
     const { classes } = this.props;
     return (
-      <Paper className={classes.paper}>
+      <Paper className={classes.root}>
         <Typography
           className={classes.typography}
           variant="h4"
@@ -332,7 +357,7 @@ class Links extends React.Component {
         >
           Links
         </Typography>
-        <Grid container spacing={16}>
+        <Grid container className={classes.root}>
           <IconButton aria-label="Search">
             <SearchIcon />
           </IconButton>
@@ -351,18 +376,20 @@ class Links extends React.Component {
             Add Link
           </Button>
         </Grid>
-        <Grid container spacing={16} className={classes.tableContainer}>
+        <Grid container className={classes.tableContainer}>
           <Table className={classes.table}>
-            <TableHead >
-              {/* currently the table head has weird behavior when scrolling (see open issue: https://github.com/mui-org/material-ui/issues/6625) */}
+            <TableHead>
+              {/* TODO: Fix this - currently the table head has weird behavior when scrolling (see open issue: https://github.com/mui-org/material-ui/issues/6625) */}
               <TableRow className={classes.tableHead}>
-                <TableCell className={classes.tableHead}></TableCell>
+                <TableCell className={classes.tableHead} />
                 <TableCell className={classes.tableHead}>Entity</TableCell>
                 <TableCell className={classes.tableHead}>Property</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.namedLinks.map(namedLink => this.generateLinkTableRow(namedLink))}
+              {this.state.namedLinks.map(namedLink =>
+                this.generateLinkTableRow(namedLink)
+              )}
             </TableBody>
           </Table>
         </Grid>

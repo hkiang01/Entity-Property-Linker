@@ -7,9 +7,12 @@ import Links from "./Links";
 
 const styles = theme => ({
   root: {
-    margin: 10,
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2
+    padding: theme.spacing.unit * 2,
+    flexGrow: 1
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    flexGrow: 1
   }
 });
 
@@ -47,26 +50,27 @@ class Linker extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
-        <Grid container spacing={24}>
-          <Grid item xs>
+      <Grid container spacing={24} className={classes.root}>
+        <Grid container spacing={24} className={classes.root}>
+          <Grid item spacing={11} className={classes.paper}>
             <Entities selectedEntityListener={this.selectedEntityListener} />
           </Grid>
-          <Grid item xs>
+          <Grid item spacing={1} className={classes.root} />
+          <Grid item spacing={11} className={classes.paper}>
             <Properties
               selectedPropertyListener={this.selectedPropertyListener}
             />
           </Grid>
+          <Grid />
         </Grid>
-        <Grid container spacing={24}>
-          <Grid item xs>
-            <Links
-              selectedEntity={this.state.selectedEntity}
-              selectedProperty={this.state.selectedProperty}
-            />
-          </Grid>
+        <Grid item className={classes.root} />
+        <Grid container spacing={24} className={classes.paper}>
+          <Links
+            selectedEntity={this.state.selectedEntity}
+            selectedProperty={this.state.selectedProperty}
+          />
         </Grid>
-      </div>
+      </Grid>
     );
   }
 }

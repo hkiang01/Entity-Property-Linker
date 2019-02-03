@@ -14,6 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+
 import * as apiConfig from "../../config/api.json";
 
 /**
@@ -24,7 +25,8 @@ const styles = theme => ({
   root: {
     width: "100%",
     padding: theme.spacing.unit * 2,
-    dense: true
+    dense: true,
+    spacing: 24
   },
   typography: {
     marginLeft: 10,
@@ -38,6 +40,10 @@ const styles = theme => ({
     flex: 1
   },
   listContainer: {
+    width: "100%",
+    padding: theme.spacing.unit * 2,
+    dense: true,
+    spacing: 24,
     marginTop: 15,
     maxHeight: "35vh",
     overflow: "auto"
@@ -154,7 +160,7 @@ class Entities extends React.Component {
     const newEntityName = document.getElementById("entity-query").value;
     addEntity(newEntityName).then(record => {
       this.setState(
-        (prevState) => {
+        prevState => {
           let entities = prevState.entities;
           entities.push(new Entity(record.id, record.name));
           return {
@@ -178,7 +184,7 @@ class Entities extends React.Component {
   handleDelete = event => {
     const entityToDelete = this.state.selectedEntity;
     deleteEntity(entityToDelete).then(() => {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let entities = prevState.entities;
         entities = entities.filter(entity => entity !== entityToDelete);
         return { entities: entities, selectedEntity: null };
@@ -283,7 +289,7 @@ class Entities extends React.Component {
         >
           Entities
         </Typography>
-        <Grid container spacing={16}>
+        <Grid container className={classes.root}>
           <IconButton aria-label="Search">
             <SearchIcon />
           </IconButton>
@@ -302,7 +308,7 @@ class Entities extends React.Component {
             Add
           </Button>
         </Grid>
-        <Grid container spacing={16} className={classes.listContainer}>
+        <Grid container className={classes.listContainer}>
           <List id="entities-list" className={classes.root}>
             {this.state.entities.map(entity =>
               this.generateEntityListItem(entity)
