@@ -152,10 +152,10 @@ app.get("/link", function(req, res) {
 // add new link
 app.post("/link", function(req, res) {
   console.log("post '/link' from", req.ip);
-  const { entity_id, property_id } = req.body;
-  const values = [entity_id, property_id];
+  const { entityId, propertyId } = req.body;
+  const values = [entityId, propertyId];
   const text =
-    "INSERT INTO entity(entity_it, property_id) VALUES($1, $2) RETURNING *";
+    "INSERT INTO link(entity_id, property_id) VALUES($1, $2) RETURNING *";
   client
     .query(text, values)
     .then(result => res.status(200).send(result.rows[0]))

@@ -65,6 +65,24 @@ const getLinks = async () => {
   return body;
 };
 
+/**
+ * Adds an entity to the database by name
+ */
+const addLink = async (entityId, propertyId) => {
+  const data = JSON.stringify({ entityId: entityId, propertyId: propertyId });
+  const response = await fetch(endpoint + "/link", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: data
+  });
+  const body = await response.json();
+  console.debug("addLink response", response);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
+};
+
 class Links extends React.Component {
   /**
    * Used to store
@@ -106,8 +124,6 @@ class Links extends React.Component {
   canAddNewLink() {
     const selectedEntity = this.props.selectedEntity;
     const selectedProperty = this.props.selectedProperty;
-    console.debug("canAddNewLink selectedEntity", selectedEntity);
-    console.debug("canAddNewLink selectedProperty", selectedProperty);
     return (
       selectedEntity &&
       selectedProperty &&
@@ -118,6 +134,24 @@ class Links extends React.Component {
       )
     );
   }
+
+  /**
+   * Adds new link to database based on the selected entity and property,
+   * then adds the newly created link to the list.
+   */
+  handleAdd = event => {
+    addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(
+      record => {
+        this.setState((prevState, props) => {
+          let links = prevState.links;
+          links.push(new Link(record.entity_id, record.property_id));
+          return {
+            links: links
+          };
+        });
+      }
+    );
+  };
 
   render() {
     console.debug("Links props", this.props);
@@ -145,10 +179,10 @@ class Links extends React.Component {
           <Button
             variant="contained"
             color="secondary"
-            disabled={!this.state.canAddNewLink}
+            disabled={!this.canAddNewLink()}
             onClick={this.handleAdd}
           >
-            Create Link
+            Add Link
           </Button>
         </Grid>
         <Grid container spacing={16}>
