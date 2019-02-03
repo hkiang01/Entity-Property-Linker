@@ -152,27 +152,35 @@ class Links extends React.Component {
     selectedNamedLink: null,
     query: null,
     namedLinks: [],
-    canAddNewLink: this.canAddNewLink()
+    canAddNewLink: false
   };
 
   /**
    * Gets the named_link records from the database,
    * transforms them into NamedLink instances,
    * and populates the state
+   *
+   * Also updates the namedLinksListener of the updated named links, if defined
    */
   componentDidMount() {
     getNamedLinks().then(namedLinks => {
       console.debug("componentDidMount namedLinks", namedLinks);
       this.setState({ namedLinks: namedLinks }, () => {
+        if (this.props.namedLinksListener) {
+          this.props.namedLinksListener(this.state.namedLinks);
+        }
         console.debug("componentDidMount state", this.state);
       });
     });
   }
+
   /**
    * Adds new link to database based on the selected entity and property.
    * Note that the view from which getNamedLinks() pulls from won't be updated yet.
    * To compensate, this method creates a new NamedLink based on the information that would appear in the named_link view once updated
    * This way, the user doesn't have to refresh the page in order to see the newly-added link in the "Links" list
+   *
+   * Also updates the namedLinksListener of the updated named links, if defined
    */
   handleAdd = () => {
     addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(
@@ -191,6 +199,9 @@ class Links extends React.Component {
             return { namedLinks: namedLinks };
           },
           () => {
+            if (this.props.namedLinksListener) {
+              this.props.namedLinksListener(this.state.namedLinks);
+            }
             console.debug("handleAdd state", this.state);
           }
         )
@@ -201,6 +212,8 @@ class Links extends React.Component {
    * Deletes the selected link from the database,
    * Removes the selected link from the list of namedLinks,
    * then sets the selected namedLink to null.
+   *
+   * Also updates the namedLinksListener of the updated named links, if defined
    */
   handleDelete = () => {
     const namedLinkToDelete = this.state.selectedNamedLink;
@@ -219,6 +232,9 @@ class Links extends React.Component {
         namedLinks = namedLinks.filter(
           namedLink => namedLink !== namedLinkToDelete
         );
+        if (this.props.namedLinksListener) {
+          this.props.namedLinksListener(this.state.namedLinks);
+        }
         return { namedLinks: namedLinks, selectedNamedLink: null };
       });
     });
@@ -394,8 +410,9 @@ class Links extends React.Component {
 }
 
 Links.propTypes = {
-  selectedEntity: PropTypes.instanceOf(Entity),
-  selectedProperty: PropTypes.instanceOf(Property)
+  selectedEntity: PropTypes.instanceOf(Entity).isRequired,
+  selectedProperty: PropTypes.instanceOf(Property).isRequired,
+  namedLinksListener: PropTypes.func
 };
 
 export default withStyles(styles)(Links);
