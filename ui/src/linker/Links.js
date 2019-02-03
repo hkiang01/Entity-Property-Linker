@@ -27,23 +27,18 @@ import { Property } from "./Properties";
 const styles = theme => ({
   root: {
     spacing: 24,
-    width: "100%",
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 1,
     dense: true
   },
   typography: {
-    marginLeft: 10
+    paddingLeft: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
   },
   input: {
-    marginLeft: 8,
     flex: 1
-  },
-  table: {
-    minWidth: 700
   },
   tableContainer: {
     spacing: 24,
-    marginTop: 15,
     maxHeight: "50vh",
     overflow: "auto"
   },
@@ -350,10 +345,10 @@ class Links extends React.Component {
     return (
       <Paper className={classes.root}>
         <Typography
-          className={classes.typography}
           variant="h4"
           gutterBottom
           align="left"
+          className={classes.typography}
         >
           Links
         </Typography>
@@ -377,7 +372,7 @@ class Links extends React.Component {
           </Button>
         </Grid>
         <Grid container className={classes.tableContainer}>
-          <Table className={classes.table}>
+          <Table>
             <TableHead>
               {/* TODO: Fix this - currently the table head has weird behavior when scrolling (see open issue: https://github.com/mui-org/material-ui/issues/6625) */}
               <TableRow className={classes.tableHead}>

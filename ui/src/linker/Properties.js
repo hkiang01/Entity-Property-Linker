@@ -24,27 +24,24 @@ import * as apiConfig from "../../config/api.json";
 const styles = theme => ({
   root: {
     width: "100%",
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 1,
     dense: true,
     spacing: 24
   },
   typography: {
-    marginLeft: 10,
-    marginBottom: 20
+    paddingLeft: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
   },
   paper: {
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing.unit * 1
   },
   input: {
-    marginLeft: 8,
     flex: 1
   },
   listContainer: {
-    width: "100%",
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 1,
     dense: true,
     spacing: 24,
-    marginTop: 15,
     maxHeight: "35vh",
     overflow: "auto"
   }
@@ -283,10 +280,10 @@ class Properties extends React.Component {
     return (
       <Paper className={classes.paper}>
         <Typography
-          className={classes.typography}
           variant="h4"
           gutterBottom
           align="left"
+          className={classes.typography}
         >
           Properties
         </Typography>
