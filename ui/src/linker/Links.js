@@ -6,7 +6,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -63,7 +62,7 @@ class Link {
 /**
  * Mimics the named_link table
  */
-class NamedLink {
+export class NamedLink {
   constructor(id, entityId, entityName, propertyId, propertyName) {
     this.id = id;
     this.entityId = entityId;
@@ -122,24 +121,6 @@ const deleteLink = async link => {
   return body;
 };
 
-/**
- * Adds aa link to the database by entityId and propertyId
- */
-const addLink = async (entityId, propertyId) => {
-  const data = JSON.stringify({ entityId: entityId, propertyId: propertyId });
-  const response = await fetch(endpoint + "/link", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("addLink response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
-
 class Links extends React.Component {
   /**
    * Used to store
@@ -151,8 +132,7 @@ class Links extends React.Component {
   state = {
     selectedNamedLink: null,
     query: null,
-    namedLinks: [],
-    canAddNewLink: false
+    namedLinks: []
   };
 
   /**
@@ -173,40 +153,6 @@ class Links extends React.Component {
       });
     });
   }
-
-  /**
-   * Adds new link to database based on the selected entity and property.
-   * Note that the view from which getNamedLinks() pulls from won't be updated yet.
-   * To compensate, this method creates a new NamedLink based on the information that would appear in the named_link view once updated
-   * This way, the user doesn't have to refresh the page in order to see the newly-added link in the "Links" list
-   *
-   * Also updates the namedLinksListener of the updated named links, if defined
-   */
-  handleAdd = () => {
-    addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(
-      newLink =>
-        this.setState(
-          prevState => {
-            let namedLinks = prevState.namedLinks;
-            const newNamedLink = new NamedLink(
-              newLink.id,
-              this.props.selectedEntity.id,
-              this.props.selectedEntity.name,
-              this.props.selectedProperty.id,
-              this.props.selectedProperty.name
-            );
-            namedLinks.push(newNamedLink);
-            return { namedLinks: namedLinks };
-          },
-          () => {
-            if (this.props.namedLinksListener) {
-              this.props.namedLinksListener(this.state.namedLinks);
-            }
-            console.debug("handleAdd state", this.state);
-          }
-        )
-    );
-  };
 
   /**
    * Deletes the selected link from the database,
@@ -233,7 +179,7 @@ class Links extends React.Component {
           namedLink => namedLink !== namedLinkToDelete
         );
         if (this.props.namedLinksListener) {
-          this.props.namedLinksListener(this.state.namedLinks);
+          this.props.namedLinksListener(namedLinks);
         }
         return { namedLinks: namedLinks, selectedNamedLink: null };
       });
@@ -269,25 +215,6 @@ class Links extends React.Component {
       console.debug("handleSelection state", this.state);
     });
   };
-
-  /**
-   * A new NamedLink can be added if there exists no NamedLink
-   * in namedLinks whose entityId and propertyId match the
-   * selectedEntity's id and selectedProperty's id, respectively
-   */
-  canAddNewLink() {
-    const selectedEntity = this.props.selectedEntity;
-    const selectedProperty = this.props.selectedProperty;
-    return (
-      selectedEntity &&
-      selectedProperty &&
-      !this.state.namedLinks.find(
-        namedLink =>
-          namedLink.entityId === selectedEntity.id &&
-          namedLink.propertyId === selectedProperty.id
-      )
-    );
-  }
 
   /**
    * Whether the selected Entity or Property references the Link.
@@ -378,14 +305,6 @@ class Links extends React.Component {
             placeholder="Search Links"
             onChange={this.handleSearch}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={!this.canAddNewLink()}
-            onClick={this.handleAdd}
-          >
-            Add Link
-          </Button>
         </Grid>
         <Grid container className={classes.tableContainer}>
           <Table>

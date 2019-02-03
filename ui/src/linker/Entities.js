@@ -247,9 +247,11 @@ class Entities extends React.Component {
     return (
       <ListItem
         disabled={
-          this.state.selectedEntity !== entity &&
-          this.state.query &&
-          !entity.name.includes(this.state.query)
+          !!(
+            this.state.selectedEntity !== entity &&
+            this.state.query &&
+            !entity.name.includes(this.state.query)
+          )
         }
         key={entity.id}
       >

@@ -248,9 +248,11 @@ class Properties extends React.Component {
     return (
       <ListItem
         disabled={
-          this.state.selectedProperty !== property &&
-          this.state.query &&
-          !property.name.includes(this.state.query)
+          !!(
+            this.state.selectedProperty !== property &&
+            this.state.query &&
+            !property.name.includes(this.state.query)
+          )
         }
         key={property.id}
       >
