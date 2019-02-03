@@ -146,9 +146,9 @@ VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.
 
 3.  Run migrations backwards
 
-        ```bash
-        docker-compose run api run npm rollback
-        ```
+    ```bash
+    docker-compose run api run npm rollback
+    ```
 
     See [api/migrations/sqls](api/migrations/sqls) (new migrations: [create](https://db-migrate.readthedocs.io/en/latest/Getting%20Started/commands/#create))
 
