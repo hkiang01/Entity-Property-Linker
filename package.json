@@ -1,6 +1,6 @@
 {
   "name": "entity-property-linker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "dev tools for entity-property-linker",
   "main": "\"\"",
   "dependencies": {
