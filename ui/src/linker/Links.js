@@ -14,6 +14,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Radio from "@material-ui/core/Radio";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import * as apiConfig from "../../config/api.json";
 import { Entity } from "./Entities";
@@ -46,6 +47,17 @@ const styles = theme => ({
 });
 
 /**
+ * Mimics the link table
+ */
+class Link {
+  constructor(id, entityId, propertyId) {
+    this.id = id;
+    this.entityId = entityId;
+    this.propertyId = propertyId;
+  }
+}
+
+/**
  * Mimics the named_link table
  */
 class NamedLink {
@@ -66,7 +78,7 @@ const endpoint = apiConfig.dev.endpoint;
 /**
  * Gets named_link records from the database
  */
-let getNamedLinks = async () => {
+const getNamedLinks = async () => {
   const response = await fetch(endpoint + "/named_link");
   const body = await response.json();
   console.debug("getLinks response", response);
@@ -78,6 +90,25 @@ let getNamedLinks = async () => {
     return records.map(
     record => new NamedLink(record.id, record.entity_id, record.entity_name, record.property_id, record.property_name)
   )});
+};
+
+/**
+ * Delets link from the database
+ */
+const deleteLink = async link => {
+  console.debug("deleteLink link", link);
+  const data = JSON.stringify({ id: link.id });
+  const response = await fetch(endpoint + "/link", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: data
+  });
+  const body = await response.json();
+  console.debug("deleteLink response", response);
+  if (response.status !== 200) throw Error(body.message);
+  return body;
 };
 
 /**
@@ -133,9 +164,9 @@ class Links extends React.Component {
    * To compensate, this method creates a new NamedLink based on the information that would appear in the named_link view once updated 
    * This way, the user doesn't have to refresh the page in order to see the newly-added link in the "Links" list
    */
-  handleAdd = event => {
+  handleAdd = () => {
     addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(newLink =>
-        this.setState((prevState, props) => {
+        this.setState((prevState) => {
           let namedLinks = prevState.namedLinks;
           const newNamedLink = new NamedLink(newLink.id, this.props.selectedEntity.id, this.props.selectedEntity.name,this.props.selectedProperty.id, this.props.selectedProperty.name);
           namedLinks.push(newNamedLink);
@@ -145,12 +176,34 @@ class Links extends React.Component {
   }
 
   /**
+   * Deletes the selected link from the database,
+   * Removes the selected link from the list of namedLinks,
+   * then sets the selected namedLink to null.
+   */
+  handleDelete = () => {
+    const namedLinkToDelete = this.state.selectedNamedLink;
+    const linkToDelete = new Link(namedLinkToDelete.id, namedLinkToDelete.entityId, namedLinkToDelete.propertyId);
+    console.debug("handleDelete");
+    console.debug("handleDelete namedLinkToDelete", namedLinkToDelete);
+    console.debug("handleDelete linkToDelete", linkToDelete);
+
+    deleteLink(linkToDelete).then(() => {
+      this.setState((prevState) => {
+        let namedLinks = prevState.namedLinks;
+        namedLinks = namedLinks.filter(namedLink => namedLink !== namedLinkToDelete);
+        return { namedLinks: namedLinks, selectedNamedLink: null };
+      });
+    });
+  };
+
+  /**
    * Toggles the selection of a NamedLink
    * If the NamedLink is already selected,
    */
   handleSelection = selection => {
     const selectionId = selection.currentTarget.value;
     const selectedNamedLink = this.state.namedLinks.find(namedLink => namedLink.id === selectionId);
+    console.debug("handleSelection selectedNamedLink", selectedNamedLink);
     this.setState({ selectedNamedLink: selectedNamedLink }, () => {
       console.debug("handleSelection state", this.state);
     });
@@ -223,6 +276,16 @@ class Links extends React.Component {
         {/* // TODO: change IDs below to corresponding names */}
         <TableCell>{namedLink.entityName}</TableCell>
         <TableCell>{namedLink.propertyName}</TableCell>
+        <TableCell>
+          <IconButton
+              aria-label="Delete"
+              onClick={this.handleDelete}
+              value={namedLink.id}
+              disabled={this.state.selectedNamedLink !== namedLink}
+            >
+            <DeleteIcon />
+          </IconButton>
+        </TableCell>
       </TableRow>
     );
   }

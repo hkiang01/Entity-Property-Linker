@@ -170,7 +170,7 @@ app.options("/link", cors()); // enable pre-flight request for DELETE request
 app.delete("/link", function(req, res) {
   console.log("delete '/link' from", req.ip);
   const { id } = req.body;
-  const values = [id, name];
+  const values = [id];
   const text = "DELETE FROM link WHERE id=$1 RETURNING *";
   client
     .query(text, values)

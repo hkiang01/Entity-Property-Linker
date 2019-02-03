@@ -149,7 +149,7 @@ class Properties extends React.Component {
     const newPropertyName = document.getElementById("property-query").value;
     addProperty(newPropertyName).then(response => {
       this.setState(
-        (prevState, props) => {
+        (prevState) => {
           let properties = prevState.properties;
           properties.push(new Property(response.id, response.name));
           return {
@@ -170,10 +170,10 @@ class Properties extends React.Component {
    * Removes the selected Property from the list of properties,
    * then sets the selected Property to null.
    */
-  handleDelete = event => {
+  handleDelete = () => {
     const propertyToDelete = this.state.selectedProperty;
     deleteProperty(propertyToDelete).then(response => {
-      this.setState((prevState, props) => {
+      this.setState((prevState) => {
         let properties = prevState.properties;
         properties = properties.filter(
           property => property !== propertyToDelete

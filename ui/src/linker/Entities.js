@@ -85,7 +85,7 @@ const addEntity = async name => {
 };
 
 /**
- * Delets entities from the database
+ * Delets entity from the database
  */
 const deleteEntity = async entity => {
   const data = JSON.stringify({ id: entity.id, name: entity.name });
@@ -145,11 +145,11 @@ class Entities extends React.Component {
    * Finally, it clears the 'query' (both state and search bar value)
    * so the entity list can be displayed in full.
    */
-  handleAdd = event => {
+  handleAdd = () => {
     const newEntityName = document.getElementById("entity-query").value;
     addEntity(newEntityName).then(record => {
       this.setState(
-        (prevState, props) => {
+        (prevState) => {
           let entities = prevState.entities;
           entities.push(new Entity(record.id, record.name));
           return {
@@ -172,11 +172,11 @@ class Entities extends React.Component {
    */
   handleDelete = event => {
     const entityToDelete = this.state.selectedEntity;
-    deleteEntity(entityToDelete).then(response => {
-      this.setState((prevState, props) => {
+    deleteEntity(entityToDelete).then(() => {
+      this.setState((prevState) => {
         let entities = prevState.entities;
         entities = entities.filter(entity => entity !== entityToDelete);
-        return { entities: entities };
+        return { entities: entities, selectedEntity: null };
       });
     });
   };
