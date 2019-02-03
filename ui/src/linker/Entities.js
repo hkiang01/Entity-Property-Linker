@@ -14,6 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+
 import * as apiConfig from "../../config/api.json";
 
 /**
@@ -23,22 +24,24 @@ import * as apiConfig from "../../config/api.json";
 const styles = theme => ({
   root: {
     width: "100%",
-    padding: theme.spacing.unit * 2,
-    dense: true
+    padding: theme.spacing.unit * 1,
+    dense: true,
+    spacing: 24
   },
   typography: {
-    marginLeft: 10,
-    marginBottom: 20
+    paddingLeft: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
   },
   paper: {
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing.unit * 1
   },
   input: {
-    marginLeft: 8,
     flex: 1
   },
   listContainer: {
-    marginTop: 15,
+    padding: theme.spacing.unit * 1,
+    dense: true,
+    spacing: 24,
     maxHeight: "35vh",
     overflow: "auto"
   }
@@ -154,7 +157,7 @@ class Entities extends React.Component {
     const newEntityName = document.getElementById("entity-query").value;
     addEntity(newEntityName).then(record => {
       this.setState(
-        (prevState) => {
+        prevState => {
           let entities = prevState.entities;
           entities.push(new Entity(record.id, record.name));
           return {
@@ -178,7 +181,7 @@ class Entities extends React.Component {
   handleDelete = event => {
     const entityToDelete = this.state.selectedEntity;
     deleteEntity(entityToDelete).then(() => {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let entities = prevState.entities;
         entities = entities.filter(entity => entity !== entityToDelete);
         return { entities: entities, selectedEntity: null };
@@ -236,14 +239,20 @@ class Entities extends React.Component {
    * - Selecting an entity
    * - Deleting an entity
    *
-   * Finally, the entity is visible only if:
-   * - the search box is empty, or
-   * - the search box's query value is contained within the entity's name
+   * Finally, the entity is disabled only if:
+   * - it's not selected entity and...
+   *   - the search box's query value is not contained within the entity's name
    */
   generateEntityListItem(entity) {
     return (
       <ListItem
-        hidden={!this.state.query || entity.name.includes(this.state.query)}
+        disabled={
+          !!(
+            this.state.selectedEntity !== entity &&
+            this.state.query &&
+            !entity.name.includes(this.state.query)
+          )
+        }
         key={entity.id}
       >
         <Radio
@@ -276,14 +285,14 @@ class Entities extends React.Component {
     return (
       <Paper className={classes.paper}>
         <Typography
-          className={classes.typography}
           variant="h4"
           gutterBottom
           align="left"
+          className={classes.typography}
         >
           Entities
         </Typography>
-        <Grid container spacing={16}>
+        <Grid container className={classes.root}>
           <IconButton aria-label="Search">
             <SearchIcon />
           </IconButton>
@@ -295,14 +304,14 @@ class Entities extends React.Component {
           />
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             disabled={!this.state.enableAddButton}
             onClick={this.handleAdd}
           >
             Add
           </Button>
         </Grid>
-        <Grid container spacing={16} className={classes.listContainer}>
+        <Grid container className={classes.listContainer}>
           <List id="entities-list" className={classes.root}>
             {this.state.entities.map(entity =>
               this.generateEntityListItem(entity)

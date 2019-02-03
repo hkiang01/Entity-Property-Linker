@@ -6,7 +6,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -26,26 +25,19 @@ import { Property } from "./Properties";
  */
 const styles = theme => ({
   root: {
-    width: "100%",
-    padding: theme.spacing.unit * 2,
+    spacing: 24,
+    padding: theme.spacing.unit * 1,
     dense: true
   },
   typography: {
-    marginLeft: 10,
-    marginBottom: 20
-  },
-  paper: {
-    padding: theme.spacing.unit * 2
+    paddingLeft: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
   },
   input: {
-    marginLeft: 8,
     flex: 1
   },
-  table: {
-    minWidth: 700
-  },
   tableContainer: {
-    marginTop: 15,
+    spacing: 24,
     maxHeight: "50vh",
     overflow: "auto"
   },
@@ -70,7 +62,7 @@ class Link {
 /**
  * Mimics the named_link table
  */
-class NamedLink {
+export class NamedLink {
   constructor(id, entityId, entityName, propertyId, propertyName) {
     this.id = id;
     this.entityId = entityId;
@@ -98,8 +90,16 @@ const getNamedLinks = async () => {
   return result.then(function(records) {
     console.debug("getNamedLinks records", records);
     return records.map(
-    record => new NamedLink(record.id, record.entity_id, record.entity_name, record.property_id, record.property_name)
-  )});
+      record =>
+        new NamedLink(
+          record.id,
+          record.entity_id,
+          record.entity_name,
+          record.property_id,
+          record.property_name
+        )
+    );
+  });
 };
 
 /**
@@ -121,24 +121,6 @@ const deleteLink = async link => {
   return body;
 };
 
-/**
- * Adds aa link to the database by entityId and propertyId
- */
-const addLink = async (entityId, propertyId) => {
-  const data = JSON.stringify({ entityId: entityId, propertyId: propertyId });
-  const response = await fetch(endpoint + "/link", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("addLink response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
-
 class Links extends React.Component {
   /**
    * Used to store
@@ -150,57 +132,55 @@ class Links extends React.Component {
   state = {
     selectedNamedLink: null,
     query: null,
-    namedLinks: [],
-    canAddNewLink: this.canAddNewLink()
+    namedLinks: []
   };
 
   /**
    * Gets the named_link records from the database,
    * transforms them into NamedLink instances,
    * and populates the state
+   *
+   * Also updates the namedLinksListener of the updated named links, if defined
    */
   componentDidMount() {
-    getNamedLinks()
-      .then(namedLinks => {
-        console.debug("componentDidMount namedLinks", namedLinks);
-        this.setState({ namedLinks: namedLinks }, () => {
-          console.debug("componentDidMount state", this.state);
-        });
+    getNamedLinks().then(namedLinks => {
+      console.debug("componentDidMount namedLinks", namedLinks);
+      this.setState({ namedLinks: namedLinks }, () => {
+        if (this.props.namedLinksListener) {
+          this.props.namedLinksListener(this.state.namedLinks);
+        }
+        console.debug("componentDidMount state", this.state);
       });
-  }
-  /**
-   * Adds new link to database based on the selected entity and property.
-   * Note that the view from which getNamedLinks() pulls from won't be updated yet.
-   * To compensate, this method creates a new NamedLink based on the information that would appear in the named_link view once updated 
-   * This way, the user doesn't have to refresh the page in order to see the newly-added link in the "Links" list
-   */
-  handleAdd = () => {
-    addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(newLink =>
-        this.setState((prevState) => {
-          let namedLinks = prevState.namedLinks;
-          const newNamedLink = new NamedLink(newLink.id, this.props.selectedEntity.id, this.props.selectedEntity.name,this.props.selectedProperty.id, this.props.selectedProperty.name);
-          namedLinks.push(newNamedLink);
-          return { namedLinks: namedLinks }}, () => {
-          console.debug("handleAdd state", this.state);
-        }));
+    });
   }
 
   /**
    * Deletes the selected link from the database,
    * Removes the selected link from the list of namedLinks,
    * then sets the selected namedLink to null.
+   *
+   * Also updates the namedLinksListener of the updated named links, if defined
    */
   handleDelete = () => {
     const namedLinkToDelete = this.state.selectedNamedLink;
-    const linkToDelete = new Link(namedLinkToDelete.id, namedLinkToDelete.entityId, namedLinkToDelete.propertyId);
+    const linkToDelete = new Link(
+      namedLinkToDelete.id,
+      namedLinkToDelete.entityId,
+      namedLinkToDelete.propertyId
+    );
     console.debug("handleDelete");
     console.debug("handleDelete namedLinkToDelete", namedLinkToDelete);
     console.debug("handleDelete linkToDelete", linkToDelete);
 
     deleteLink(linkToDelete).then(() => {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let namedLinks = prevState.namedLinks;
-        namedLinks = namedLinks.filter(namedLink => namedLink !== namedLinkToDelete);
+        namedLinks = namedLinks.filter(
+          namedLink => namedLink !== namedLinkToDelete
+        );
+        if (this.props.namedLinksListener) {
+          this.props.namedLinksListener(namedLinks);
+        }
         return { namedLinks: namedLinks, selectedNamedLink: null };
       });
     });
@@ -213,7 +193,7 @@ class Links extends React.Component {
     const queryValue = event.target.value;
     this.setState(
       {
-        query: queryValue,
+        query: queryValue
       },
       () => {
         console.debug("handleSearch state", this.state);
@@ -227,31 +207,14 @@ class Links extends React.Component {
    */
   handleSelection = selection => {
     const selectionId = selection.currentTarget.value;
-    const selectedNamedLink = this.state.namedLinks.find(namedLink => namedLink.id === selectionId);
+    const selectedNamedLink = this.state.namedLinks.find(
+      namedLink => namedLink.id === selectionId
+    );
     console.debug("handleSelection selectedNamedLink", selectedNamedLink);
     this.setState({ selectedNamedLink: selectedNamedLink }, () => {
       console.debug("handleSelection state", this.state);
     });
-  }
-
-  /**
-   * A new NamedLink can be added if there exists no NamedLink
-   * in namedLinks whose entityId and propertyId match the
-   * selectedEntity's id and selectedProperty's id, respectively
-   */
-  canAddNewLink() {
-    const selectedEntity = this.props.selectedEntity;
-    const selectedProperty = this.props.selectedProperty;
-    return (
-      selectedEntity &&
-      selectedProperty &&
-      !this.state.namedLinks.find(
-        namedLink =>
-        namedLink.entityId === selectedEntity.id &&
-        namedLink.propertyId === selectedProperty.id
-      )
-    );
-  }
+  };
 
   /**
    * Whether the selected Entity or Property references the Link.
@@ -288,7 +251,7 @@ class Links extends React.Component {
   generateLinkTableRow(namedLink) {
     return (
       <TableRow
-        key={namedLink.entityId + namedLink.propertyId}
+        key={namedLink.id}
         selected={this.isLinkReferencedBySelectedEntityOrProperty(namedLink)}
       >
         <TableCell>
@@ -302,11 +265,11 @@ class Links extends React.Component {
         <TableCell>{namedLink.propertyName}</TableCell>
         <TableCell>
           <IconButton
-              aria-label="Delete"
-              onClick={this.handleDelete}
-              value={namedLink.id}
-              disabled={this.state.selectedNamedLink !== namedLink}
-            >
+            aria-label="Delete"
+            onClick={this.handleDelete}
+            value={namedLink.id}
+            disabled={this.state.selectedNamedLink !== namedLink}
+          >
             <DeleteIcon />
           </IconButton>
         </TableCell>
@@ -323,16 +286,16 @@ class Links extends React.Component {
     console.debug("Links props", this.props);
     const { classes } = this.props;
     return (
-      <Paper className={classes.paper}>
+      <Paper className={classes.root}>
         <Typography
-          className={classes.typography}
           variant="h4"
           gutterBottom
           align="left"
+          className={classes.typography}
         >
           Links
         </Typography>
-        <Grid container spacing={16}>
+        <Grid container className={classes.root}>
           <IconButton aria-label="Search">
             <SearchIcon />
           </IconButton>
@@ -342,27 +305,21 @@ class Links extends React.Component {
             placeholder="Search Links"
             onChange={this.handleSearch}
           />
-          <Button
-            variant="contained"
-            color="secondary"
-            disabled={!this.canAddNewLink()}
-            onClick={this.handleAdd}
-          >
-            Add Link
-          </Button>
         </Grid>
-        <Grid container spacing={16} className={classes.tableContainer}>
-          <Table className={classes.table}>
-            <TableHead >
-              {/* currently the table head has weird behavior when scrolling (see open issue: https://github.com/mui-org/material-ui/issues/6625) */}
-              <TableRow className={classes.tableHead}>
-                <TableCell className={classes.tableHead}></TableCell>
+        <Grid container className={classes.tableContainer}>
+          <Table>
+            <TableHead>
+              {/* TODO: Fix this - currently the table head has weird behavior when scrolling (see open issue: https://github.com/mui-org/material-ui/issues/6625) */}
+              <TableRow>
+                <TableCell className={classes.tableHead} />
                 <TableCell className={classes.tableHead}>Entity</TableCell>
                 <TableCell className={classes.tableHead}>Property</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.namedLinks.map(namedLink => this.generateLinkTableRow(namedLink))}
+              {this.state.namedLinks.map(namedLink =>
+                this.generateLinkTableRow(namedLink)
+              )}
             </TableBody>
           </Table>
         </Grid>
@@ -372,8 +329,9 @@ class Links extends React.Component {
 }
 
 Links.propTypes = {
-  selectedEntity: PropTypes.instanceOf(Entity),
-  selectedProperty: PropTypes.instanceOf(Property)
+  selectedEntity: PropTypes.instanceOf(Entity).isRequired,
+  selectedProperty: PropTypes.instanceOf(Property).isRequired,
+  namedLinksListener: PropTypes.func
 };
 
 export default withStyles(styles)(Links);

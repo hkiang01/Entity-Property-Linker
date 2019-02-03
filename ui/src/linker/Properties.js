@@ -24,22 +24,24 @@ import * as apiConfig from "../../config/api.json";
 const styles = theme => ({
   root: {
     width: "100%",
-    padding: theme.spacing.unit * 2,
-    dense: true
+    padding: theme.spacing.unit * 1,
+    dense: true,
+    spacing: 24
   },
   typography: {
-    marginLeft: 10,
-    marginBottom: 20
+    paddingLeft: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit * 2
   },
   paper: {
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing.unit * 1
   },
   input: {
-    marginLeft: 8,
     flex: 1
   },
   listContainer: {
-    marginTop: 15,
+    padding: theme.spacing.unit * 1,
+    dense: true,
+    spacing: 24,
     maxHeight: "35vh",
     overflow: "auto"
   }
@@ -154,7 +156,7 @@ class Properties extends React.Component {
     const newPropertyName = document.getElementById("property-query").value;
     addProperty(newPropertyName).then(response => {
       this.setState(
-        (prevState) => {
+        prevState => {
           let properties = prevState.properties;
           properties.push(new Property(response.id, response.name));
           return {
@@ -178,7 +180,7 @@ class Properties extends React.Component {
   handleDelete = () => {
     const propertyToDelete = this.state.selectedProperty;
     deleteProperty(propertyToDelete).then(response => {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let properties = prevState.properties;
         properties = properties.filter(
           property => property !== propertyToDelete
@@ -238,14 +240,20 @@ class Properties extends React.Component {
    * - Selecting an Property
    * - Deleting an Property
    *
-   * Finally, the Property is visible only if:
-   * - the search box is empty, or
-   * - the search box's query value is contained within the Property's name
+   * Finally, the property is disabled only if:
+   * - it's not selected property and...
+   *   - the search box's query value is not contained within the property's name
    */
   generatePropertyListItem(property) {
     return (
       <ListItem
-        hidden={!this.state.query || property.name.includes(this.state.query)}
+        disabled={
+          !!(
+            this.state.selectedProperty !== property &&
+            this.state.query &&
+            !property.name.includes(this.state.query)
+          )
+        }
         key={property.id}
       >
         <Radio
@@ -278,33 +286,33 @@ class Properties extends React.Component {
     return (
       <Paper className={classes.paper}>
         <Typography
-          className={classes.typography}
           variant="h4"
           gutterBottom
           align="left"
+          className={classes.typography}
         >
           Properties
         </Typography>
-        <Grid container spacing={16}>
+        <Grid container className={classes.root}>
           <IconButton aria-label="Search">
             <SearchIcon />
           </IconButton>
           <InputBase
             id="property-query"
             className={classes.input}
-            placeholder="Search properties"
+            placeholder="Search Properties"
             onChange={this.handleSearch}
           />
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             disabled={!this.state.enableAddButton}
             onClick={this.handleAdd}
           >
             Add
           </Button>
         </Grid>
-        <Grid container spacing={16} className={classes.listContainer}>
+        <Grid container className={classes.listContainer}>
           <List id="properties-list" className={classes.root}>
             {this.state.properties.map(entity =>
               this.generatePropertyListItem(entity)
