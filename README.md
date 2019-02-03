@@ -1,6 +1,5 @@
 # eop (entities of properties)
 
-
 A simple Dockerized CRUD app using [Postgres](https://www.postgresql.org/), [Express](https://expressjs.com/), and [React](https://reactjs.org/) that manages entities, which have properties.
 Migrations are handled in the API and use [db-migrate](https://github.com/db-migrate/node-db-migrate).
 The purpose of this project was to refresh my React skills and teach myself how to work with [Material-UI](https://material-ui.com/).
@@ -31,7 +30,7 @@ Priority number 1: enable the delivery business value
 
    To deliver business value the fastest, you should be in a deployable state from day one. This enables the agile practice of iterative development, and allows stakeholders earlier opportunities to give feedback, saving development time. I'm assuming you know how to deploy Docker apps.
 
-2. A single repo instead of 3. Why? 1 PR for everything instead of 1 PR for the API, and then another for the UI
+2. A single repo instead of 2. Why? 1 PR for everything instead of 1 PR for the API, and then another for the UI
 
    This also makes deployments easier as some changes might be tightly coupled between, the API and UI. THis enables you to deliver business value faster.
 
