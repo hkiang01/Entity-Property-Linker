@@ -118,7 +118,9 @@ class Entities extends React.Component {
   };
 
   /**
-   * Gets the entiites from the database,
+   * Gets the entity records from the database,
+   * transforms them into Entity instances,
+   * and populates the state
    */
   componentDidMount() {
     getEntities()

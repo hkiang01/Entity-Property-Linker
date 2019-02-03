@@ -165,7 +165,9 @@ class Properties extends React.Component {
   };
 
   /**
-   * Gets the entiites from the database,
+   * Gets the property records from the database,
+   * transforms them into Property instances,
+   * and populates the state
    */
   componentDidMount() {
     getProperties()

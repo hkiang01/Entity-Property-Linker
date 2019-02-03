@@ -81,12 +81,17 @@ class Links extends React.Component {
   };
 
   /**
-   * Gets the entiites from the database,
+   * Gets the link records from the database,
+   * transforms them into Link instances,
+   * and populates the state
    */
   componentDidMount() {
     getLinks()
       .then(res => {
-        this.setState({ links: res }, () => {
+        const retrievedLinks = res.map(
+          record => new Link(record.entity_id, record.property_id)
+        );
+        this.setState({ links: retrievedLinks }, () => {
           console.debug("componentDidMount state", this.state);
         });
       })
@@ -101,6 +106,8 @@ class Links extends React.Component {
   canAddNewLink() {
     const selectedEntity = this.props.selectedEntity;
     const selectedProperty = this.props.selectedProperty;
+    console.debug("canAddNewLink selectedEntity", selectedEntity);
+    console.debug("canAddNewLink selectedProperty", selectedProperty);
     return (
       selectedEntity &&
       selectedProperty &&
@@ -113,6 +120,7 @@ class Links extends React.Component {
   }
 
   render() {
+    console.debug("Links props", this.props);
     const { classes } = this.props;
     return (
       <Paper className={classes.paper}>
