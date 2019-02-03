@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Entities from "./Entities";
 import Properties from "./Properties";
+import Button from "@material-ui/core/Button";
 import Links from "./Links";
 
 const styles = theme => ({
@@ -49,20 +50,27 @@ class Linker extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid container spacing={24} className={classes.root}>
-        <Grid container spacing={24} className={classes.root}>
-          <Grid item spacing={12} className={classes.gridItem}>
+      <Grid container spacing={32} className={classes.root}>
+        <Grid container spacing={32} className={classes.root}>
+          <Grid item className={classes.gridItem}>
             <Entities selectedEntityListener={this.selectedEntityListener} />
           </Grid>
-          <Grid item spacing={12} className={classes.gridItem}>
+          <Grid item className={classes.gridItem}>
             <Properties
               selectedPropertyListener={this.selectedPropertyListener}
             />
           </Grid>
           <Grid />
         </Grid>
-        <Grid container spacing={24} className={classes.root}>
-          <Grid item spacing={24} className={classes.gridItem}>
+        <Grid container spacing={32} className={classes.root}>
+          <Grid item className={classes.gridItem}>
+            <Button variant="contained" color="secondary">
+              Create Link
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container spacing={32} className={classes.root}>
+          <Grid item className={classes.gridItem}>
             <Links
               selectedEntity={this.state.selectedEntity}
               selectedProperty={this.state.selectedProperty}

@@ -308,7 +308,7 @@ class Links extends React.Component {
   generateLinkTableRow(namedLink) {
     return (
       <TableRow
-        key={namedLink.entityId + namedLink.propertyId}
+        key={namedLink.id}
         selected={this.isLinkReferencedBySelectedEntityOrProperty(namedLink)}
       >
         <TableCell>
@@ -375,7 +375,7 @@ class Links extends React.Component {
           <Table>
             <TableHead>
               {/* TODO: Fix this - currently the table head has weird behavior when scrolling (see open issue: https://github.com/mui-org/material-ui/issues/6625) */}
-              <TableRow className={classes.tableHead}>
+              <TableRow>
                 <TableCell className={classes.tableHead} />
                 <TableCell className={classes.tableHead}>Entity</TableCell>
                 <TableCell className={classes.tableHead}>Property</TableCell>
