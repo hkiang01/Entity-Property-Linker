@@ -46,10 +46,13 @@ const endpoint = apiConfig.dev.endpoint;
 
 /**
  * An Property corresponding to the DB's `Property` table
+ * This is available to be imported
  */
-function Property(id, name) {
-  this.id = id;
-  this.name = name;
+export class Property {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
 }
 
 /**
@@ -77,13 +80,12 @@ const addProperty = async name => {
   });
   const body = await response.json();
   console.debug("addProperty response", response);
-  console.debug("addProperty body", body);
   if (response.status !== 200) throw Error(body.message);
   return body;
 };
 
 /**
- * Delets Properties from the database
+ * Deletes Properties from the database
  */
 const deleteProperty = async property => {
   const data = JSON.stringify({ id: property.id, name: property.name });
@@ -96,7 +98,6 @@ const deleteProperty = async property => {
   });
   const body = await response.json();
   console.debug("deleteProperty response", response);
-  console.debug("deleteProperty body", body);
   if (response.status !== 200) throw Error(body.message);
   return body;
 };
@@ -169,7 +170,10 @@ class Properties extends React.Component {
   componentDidMount() {
     getProperties()
       .then(res => {
-        this.setState({ properties: res }, () => {
+        const retrievedProperties = res.map(
+          record => new Property(record.id, record.name)
+        );
+        this.setState({ properties: retrievedProperties }, () => {
           console.debug("componentDidMount state", this.state);
         });
       })
@@ -193,7 +197,7 @@ class Properties extends React.Component {
         )
       },
       () => {
-        console.debug(this.state);
+        console.debug("handleSearch state", this.state);
       }
     );
   };
@@ -221,7 +225,7 @@ class Properties extends React.Component {
       if (this.props.selectedPropertyListener) {
         this.props.selectedPropertyListener(updatedSelection);
       }
-      console.debug(this.state);
+      console.debug("handleSelection state", this.state);
     });
   };
 

@@ -60,7 +60,10 @@ class Linker extends React.Component {
         </Grid>
         <Grid container spacing={24}>
           <Grid item xs>
-            <Links />
+            <Links
+              selectedEntity={this.state.selectedEntity}
+              selectedProperty={this.state.selectedProperty}
+            />
           </Grid>
         </Grid>
       </div>

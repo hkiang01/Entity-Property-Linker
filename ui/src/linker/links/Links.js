@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -12,7 +13,10 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+
 import * as apiConfig from "../../../config/api.json";
+import { Entity } from "../entities/Entities";
+import { Property } from "../properties/Properties";
 
 /**
  * Styles named after their respective components.
@@ -73,7 +77,7 @@ class Links extends React.Component {
     selectedLink: null,
     query: null,
     links: [],
-    enableAddButton: false
+    canAddNewLink: this.canAddNewLink()
   };
 
   /**
@@ -87,6 +91,25 @@ class Links extends React.Component {
         });
       })
       .catch(err => console.error(err));
+  }
+
+  /**
+   * A new Link can be added if there exists no Link
+   * in links whose entityId and propertyId match the
+   * selectedEntity's id and selectedProperty's id, respectively
+   */
+  canAddNewLink() {
+    const selectedEntity = this.props.selectedEntity;
+    const selectedProperty = this.props.selectedProperty;
+    return (
+      selectedEntity &&
+      selectedProperty &&
+      !this.state.links.find(
+        link =>
+          link.entityId === selectedEntity.id &&
+          link.propertyId === selectedProperty.id
+      )
+    );
   }
 
   render() {
@@ -114,10 +137,10 @@ class Links extends React.Component {
           <Button
             variant="contained"
             color="secondary"
-            disabled={!this.state.enableAddButton}
+            disabled={!this.state.canAddNewLink}
             onClick={this.handleAdd}
           >
-            Add
+            Create Link
           </Button>
         </Grid>
         <Grid container spacing={16}>
@@ -142,5 +165,10 @@ class Links extends React.Component {
     );
   }
 }
+
+Links.propTypes = {
+  selectedEntity: PropTypes.instanceOf(Entity),
+  selectedProperty: PropTypes.instanceOf(Property)
+};
 
 export default withStyles(styles)(Links);

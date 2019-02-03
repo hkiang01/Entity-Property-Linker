@@ -40,11 +40,14 @@ const styles = theme => ({
 });
 
 /**
- * An Entity corresponding to the DB's `entity` table
+ * An Entity corresponding to the DB's `entity` table.
+ * This schema is available to be imported
  */
-function Entity(id, name) {
-  this.id = id;
-  this.name = name;
+export class Entity {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
 }
 
 /**
@@ -77,7 +80,6 @@ const addEntity = async name => {
   });
   const body = await response.json();
   console.debug("addEntity response", response);
-  console.debug("addEntity body", body);
   if (response.status !== 200) throw Error(body.message);
   return body;
 };
@@ -96,7 +98,6 @@ const deleteEntity = async entity => {
   });
   const body = await response.json();
   console.debug("deleteEntity response", response);
-  console.debug("deleteEntity body", body);
   if (response.status !== 200) throw Error(body.message);
   return body;
 };
@@ -122,7 +123,10 @@ class Entities extends React.Component {
   componentDidMount() {
     getEntities()
       .then(res => {
-        this.setState({ entities: res }, () => {
+        const retrievedEntities = res.map(
+          record => new Entity(record.id, record.name)
+        );
+        this.setState({ entities: retrievedEntities }, () => {
           console.debug("componentDidMount state", this.state);
         });
       })
@@ -192,7 +196,7 @@ class Entities extends React.Component {
         )
       },
       () => {
-        console.debug(this.state);
+        console.debug("handleSearch state", this.state);
       }
     );
   };
@@ -210,10 +214,6 @@ class Entities extends React.Component {
       this.state.selectedEntity && this.state.selectedEntity.id === selectionId
     );
 
-    console.debug("handleSelection selection", selection);
-    console.debug("handleSelection selectionId", selectionId);
-    console.debug("handleSelection alreadySelected", alreadySelected);
-
     const updatedSelection = alreadySelected
       ? null
       : this.state.entities.filter(entity => entity.id === selectionId)[0];
@@ -222,7 +222,7 @@ class Entities extends React.Component {
       if (this.props.selectedEntityListener) {
         this.props.selectedEntityListener(updatedSelection);
       }
-      console.debug(this.state);
+      console.debug("handleSelection state", this.state);
     });
   };
 
