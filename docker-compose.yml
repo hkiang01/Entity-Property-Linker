@@ -7,7 +7,7 @@ services:
       - api
       - database
     ports:
-      - "3000:3000"
+      - "5000:5000"
     environment:
       API_PORT: 3001
   api:
@@ -21,7 +21,7 @@ services:
       PORT: 3001
       PGUSER: postgres
       PGPASSWORD: postgres
-      PGDATABASE: eop
+      PGDATABASE: entity-property-linker
       PGPORT: 5432
   database:
     image: postgres:11
@@ -29,6 +29,6 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_DB: eop
+      POSTGRES_DB: entity-property-linker
     ports:
       - "5432:5432"

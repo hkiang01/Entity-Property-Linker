@@ -1,7 +1,7 @@
 {
-  "name": "eop-api",
+  "name": "entity-property-linker-api",
   "version": "1.0.0",
-  "description": "entities of properties API",
+  "description": "entity-property-linker API",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/hkiang01/eop.git"
+    "url": "git+https://github.com/hkiang01/Entity-Property-Linker.git"
   },
   "author": "Harrison Kiang",
-  "license": "ISC",
+  "license": "LGPL-2.1-only",
   "bugs": {
-    "url": "https://github.com/hkiang01/eop/issues"
+    "url": "https://github.com/hkiang01/Entity-Property-Linker/issues"
   },
-  "homepage": "https://github.com/hkiang01/eop#readme",
+  "homepage": "https://github.com/hkiang01/Entity-Property-Linker#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",

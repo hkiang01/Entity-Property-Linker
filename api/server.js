@@ -183,7 +183,6 @@ app.delete("/link", function(req, res) {
     });
 });
 
-
 // get all named_links
 app.get("/named_link", function(req, res) {
   console.log("get '/named_link' from", req.ip);

@@ -1,6 +1,6 @@
 FROM node:11-slim
 
-WORKDIR /app/eop/
+WORKDIR /app/entity-property-linker/
 
 # dependencies
 COPY package.json ./package.json

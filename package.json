@@ -1,7 +1,7 @@
 {
-  "name": "eop",
+  "name": "entity-property-linker",
   "version": "1.0.0",
-  "description": "dev tools for eop",
+  "description": "dev tools for entity-property-linker",
   "main": "\"\"",
   "dependencies": {
     "express": "^4.16.4"
@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hkiang01/eop.git"
+    "url": "git+https://github.com/hkiang01/Entity-Property-Linker.git"
   },
   "author": "Harrison Kiang",
-  "license": "ISC",
+  "license": "LGPL-2.1-only",
   "bugs": {
-    "url": "https://github.com/hkiang01/eop/issues"
+    "url": "https://github.com/hkiang01/Entity-Property-Linker/issues"
   },
-  "homepage": "https://github.com/hkiang01/eop#readme"
+  "homepage": "https://github.com/hkiang01/Entity-Property-Linker#readme"
 }

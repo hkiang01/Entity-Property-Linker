@@ -4,7 +4,7 @@
     "user": "postgres",
     "password": "postgres",
     "host": "database",
-    "database": "eop"
+    "database": "entity-property-linker"
   },
   "sql-file": true
 }
