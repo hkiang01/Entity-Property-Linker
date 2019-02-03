@@ -38,6 +38,7 @@ const styles = theme => ({
     flex: 1
   },
   listContainer: {
+    marginTop: 15,
     maxHeight: "50vh",
     overflow: "auto"
   }

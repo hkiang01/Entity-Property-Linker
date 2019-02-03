@@ -45,6 +45,7 @@ const styles = theme => ({
     minWidth: 700
   },
   tableContainer: {
+    marginTop: 15,
     maxHeight: "50vh",
     overflow: "auto"
   },
