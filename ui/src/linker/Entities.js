@@ -39,7 +39,7 @@ const styles = theme => ({
   },
   listContainer: {
     marginTop: 15,
-    maxHeight: "50vh",
+    maxHeight: "35vh",
     overflow: "auto"
   }
 });
