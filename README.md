@@ -96,7 +96,7 @@ docker-compose build
 docker-compose up
 ```
 
-Open browser to [http://localhost:3000](http://localhost:3000)
+Open browser to [http://localhost:5000](http://localhost:5000)
 
 ### Teardown
 

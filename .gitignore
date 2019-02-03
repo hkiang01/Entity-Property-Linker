@@ -76,3 +76,5 @@ typings/
 # next.js build output
 .next
 
+# UI prod build
+ui/build

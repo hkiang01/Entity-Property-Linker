@@ -10,5 +10,8 @@ COPY public public
 COPY src src
 COPY config config
 
+RUN npm run build
+RUN npm install -g serve
+
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+CMD ["serve", "-s", "build"]
