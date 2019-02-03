@@ -1,6 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import Entities from "./Entities";
 import Properties from "./Properties";
 import Button from "@material-ui/core/Button";
@@ -11,7 +12,6 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2
   },
   gridItem: {
-    padding: theme.spacing.unit * 1,
     flexGrow: 1
   }
 });
@@ -53,20 +53,28 @@ class Linker extends React.Component {
       <Grid container spacing={32} className={classes.root}>
         <Grid container spacing={32} className={classes.root}>
           <Grid item className={classes.gridItem}>
-            <Entities selectedEntityListener={this.selectedEntityListener} />
-          </Grid>
-          <Grid item className={classes.gridItem}>
-            <Properties
-              selectedPropertyListener={this.selectedPropertyListener}
-            />
-          </Grid>
-          <Grid />
-        </Grid>
-        <Grid container spacing={32} className={classes.root}>
-          <Grid item className={classes.gridItem}>
-            <Button variant="contained" color="secondary">
-              Create Link
-            </Button>
+            <Paper>
+              <Grid container spacing={32} className={classes.root}>
+                <Grid item className={classes.gridItem}>
+                  <Entities
+                    selectedEntityListener={this.selectedEntityListener}
+                  />
+                </Grid>
+                <Grid item className={classes.gridItem}>
+                  <Properties
+                    selectedPropertyListener={this.selectedPropertyListener}
+                  />
+                </Grid>
+                <Grid />
+              </Grid>
+              <Grid container spacing={32} className={classes.root}>
+                <Grid item className={classes.gridItem}>
+                  <Button variant="contained" color="primary">
+                    Create Link
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
           </Grid>
         </Grid>
         <Grid container spacing={32} className={classes.root}>

@@ -364,7 +364,7 @@ class Links extends React.Component {
           />
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             disabled={!this.canAddNewLink()}
             onClick={this.handleAdd}
           >

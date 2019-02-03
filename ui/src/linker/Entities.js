@@ -246,7 +246,8 @@ class Entities extends React.Component {
   generateEntityListItem(entity) {
     return (
       <ListItem
-        hidden={!this.state.query || entity.name.includes(this.state.query)}
+        // hidden={!(this.state.query || entity.name.includes(this.state.query))}
+        hidden={true}
         key={entity.id}
       >
         <Radio
@@ -298,7 +299,7 @@ class Entities extends React.Component {
           />
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             disabled={!this.state.enableAddButton}
             onClick={this.handleAdd}
           >
