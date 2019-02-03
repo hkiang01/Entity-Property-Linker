@@ -156,3 +156,7 @@ VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.
    ```
 
 4. Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Known Issues
+
+- In [Links](ui/src/linker/Links.js), the table head has weird behavior when scrolling (see open issue: [https://github.com/mui-org/material-ui/issues/6625](https://github.com/mui-org/material-ui/issues/6625))
