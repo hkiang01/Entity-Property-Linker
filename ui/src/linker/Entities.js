@@ -14,7 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import * as apiConfig from "../../../config/api.json";
+import * as apiConfig from "../../config/api.json";
 
 /**
  * Styles named after their respective components.

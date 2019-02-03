@@ -1,9 +1,9 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Entities from "./entities/Entities";
-import Properties from "./properties/Properties";
-import Links from "./links/Links";
+import Entities from "./Entities";
+import Properties from "./Properties";
+import Links from "./Links";
 
 const styles = theme => ({
   root: {
