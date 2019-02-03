@@ -1,7 +1,24 @@
 # eop (entities of properties)
 
+
 A simple Dockerized CRUD app using [Postgres](https://www.postgresql.org/), [Express](https://expressjs.com/), and [React](https://reactjs.org/) that manages entities, which have properties.
 Migrations are handled in the API and use [db-migrate](https://github.com/db-migrate/node-db-migrate).
+
+- [eop (entities of properties)](#eop-entities-of-properties)
+  - [Design decisions](#design-decisions)
+  - [Prerequisites](#prerequisites)
+  - [Running the application](#running-the-application)
+    - [Startup](#startup)
+    - [Teardown](#teardown)
+  - [Configuration](#configuration)
+    - [Database](#database)
+    - [UI/API](#uiapi)
+  - [Development](#development)
+    - [Linting/Auto-formatting](#lintingauto-formatting)
+    - [Database Migrations](#database-migrations)
+    - [UI only](#ui-only)
+  - [Known Issues](#known-issues)
+
 
 ## Design decisions
 
