@@ -147,11 +147,11 @@ class Entities extends React.Component {
    */
   handleAdd = event => {
     const newEntityName = document.getElementById("entity-query").value;
-    addEntity(newEntityName).then(response => {
+    addEntity(newEntityName).then(record => {
       this.setState(
         (prevState, props) => {
           let entities = prevState.entities;
-          entities.push(new Entity(response.id, response.name));
+          entities.push(new Entity(record.id, record.name));
           return {
             query: "",
             entities: entities,

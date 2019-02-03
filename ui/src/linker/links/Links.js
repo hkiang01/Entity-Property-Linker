@@ -117,6 +117,24 @@ class Links extends React.Component {
   }
 
   /**
+   * Adds new link to database based on the selected entity and property,
+   * then adds the newly created link to the list.
+   */
+  handleAdd = event => {
+    addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(
+      record => {
+        this.setState((prevState, props) => {
+          let links = prevState.links;
+          links.push(new Link(record.entity_id, record.property_id));
+          return {
+            links: links
+          };
+        });
+      }
+    );
+  };
+
+  /**
    * A new Link can be added if there exists no Link
    * in links whose entityId and propertyId match the
    * selectedEntity's id and selectedProperty's id, respectively
@@ -136,21 +154,17 @@ class Links extends React.Component {
   }
 
   /**
-   * Adds new link to database based on the selected entity and property,
-   * then adds the newly created link to the list.
+   * Whether the selected Entity or Property
+   * references the Link
    */
-  handleAdd = event => {
-    addLink(this.props.selectedEntity.id, this.props.selectedProperty.id).then(
-      record => {
-        this.setState((prevState, props) => {
-          let links = prevState.links;
-          links.push(new Link(record.entity_id, record.property_id));
-          return {
-            links: links
-          };
-        });
-      }
-    );
+  isLinkReferencedBySelectedEntityOrProperty = link => {
+    const referencedBySelectedEntity = this.props.selectedEntity
+      ? link.entityId === this.props.selectedEntity.id
+      : false;
+    const referencedBySelectedProperty = this.props.selectedProperty
+      ? link.propertyId === this.props.selectedProperty.id
+      : false;
+    return referencedBySelectedEntity || referencedBySelectedProperty;
   };
 
   render() {
@@ -195,7 +209,12 @@ class Links extends React.Component {
             </TableHead>
             <TableBody>
               {this.state.links.map(link => (
-                <TableRow key={link.entityId + link.propertyId}>
+                <TableRow
+                  key={link.entityId + link.propertyId}
+                  selected={this.isLinkReferencedBySelectedEntityOrProperty(
+                    link
+                  )}
+                >
                   <TableCell>{link.entityId}</TableCell>
                   <TableCell>{link.propertyId}</TableCell>
                 </TableRow>
