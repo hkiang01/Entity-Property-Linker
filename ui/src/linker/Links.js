@@ -47,6 +47,11 @@ const styles = theme => ({
   tableContainer: {
     maxHeight: "50vh",
     overflow: "auto"
+  },
+  tableHead: {
+    backgroundColor: "#fff",
+    position: "sticky",
+    top: 0
   }
 });
 
@@ -348,11 +353,12 @@ class Links extends React.Component {
         </Grid>
         <Grid container spacing={16} className={classes.tableContainer}>
           <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>Entity</TableCell>
-                <TableCell>Property</TableCell>
+            <TableHead >
+              {/* currently the table head has weird behavior when scrolling (see open issue: https://github.com/mui-org/material-ui/issues/6625) */}
+              <TableRow className={classes.tableHead}>
+                <TableCell className={classes.tableHead}></TableCell>
+                <TableCell className={classes.tableHead}>Entity</TableCell>
+                <TableCell className={classes.tableHead}>Property</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
