@@ -169,6 +169,35 @@ class Links extends React.Component {
   };
 
   /**
+   * Generates a link list item with:
+   * - A radio button
+   * - the relevant Entity name
+   * - the relevant Property name
+   * - a delete icon
+   *
+   * Also adds handlers which enable:
+   * - Selecting an link
+   * - Deleting an link
+   *
+   * Finally, the link is visible only if:
+   * - the search box is empty, or
+   * - the search box's query value is contained within either:
+   *   - the link's coressponding Entity name
+   *   - the link's coressponding Property name
+   */
+  generateLinkTableRow(link) {
+    return (
+      <TableRow
+        key={link.entityId + link.propertyId}
+        selected={this.isLinkReferencedBySelectedEntityOrProperty(link)}
+      >
+        <TableCell>{link.entityId}</TableCell>
+        <TableCell>{link.propertyId}</TableCell>
+      </TableRow>
+    );
+  }
+
+  /**
    * A "Links" component is titled with the word "Links".
    * Below that, a search bar and a button to "Add Link" is present.
    * Finally, a table is shown listing the links present in state.
@@ -214,17 +243,7 @@ class Links extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.links.map(link => (
-                <TableRow
-                  key={link.entityId + link.propertyId}
-                  selected={this.isLinkReferencedBySelectedEntityOrProperty(
-                    link
-                  )}
-                >
-                  <TableCell>{link.entityId}</TableCell>
-                  <TableCell>{link.propertyId}</TableCell>
-                </TableRow>
-              ))}
+              {this.state.links.map(link => this.generateLinkTableRow(link))}
             </TableBody>
           </Table>
         </Grid>
