@@ -14,6 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+
 import * as apiConfig from "../../../config/api.json";
 
 /**
@@ -117,6 +118,24 @@ class Properties extends React.Component {
   };
 
   /**
+   * Gets the property records from the database,
+   * transforms them into Property instances,
+   * and populates the state
+   */
+  componentDidMount() {
+    getProperties()
+      .then(res => {
+        const retrievedProperties = res.map(
+          record => new Property(record.id, record.name)
+        );
+        this.setState({ properties: retrievedProperties }, () => {
+          console.debug("componentDidMount state", this.state);
+        });
+      })
+      .catch(err => console.error(err));
+  }
+
+  /**
    * Adds new Property to database with name present in 'query',
    * then adds the newly created Property to the Property list.
    *
@@ -165,24 +184,6 @@ class Properties extends React.Component {
   };
 
   /**
-   * Gets the property records from the database,
-   * transforms them into Property instances,
-   * and populates the state
-   */
-  componentDidMount() {
-    getProperties()
-      .then(res => {
-        const retrievedProperties = res.map(
-          record => new Property(record.id, record.name)
-        );
-        this.setState({ properties: retrievedProperties }, () => {
-          console.debug("componentDidMount state", this.state);
-        });
-      })
-      .catch(err => console.error(err));
-  }
-
-  /**
    * Filters the list of properties
    * Sets the condition for the add button to be enabled. It should be enabled if:
    * - 'query' is empty, or
@@ -206,26 +207,17 @@ class Properties extends React.Component {
 
   /**
    * Toggles the selection of a Property
-   * If the Property is already selected, clear it,
-   * otherwise, check it.
-   *
    * Also notifies the selectedPropertyListener, if defined, of the newly-selected Property
    */
   handleSelection = selection => {
     const selectionId = selection.currentTarget.value;
-    const alreadySelected =
-      this.state.selectedProperty &&
-      this.state.selectedProperty.id === selectionId;
+    const selectedProperty = this.state.properties.find(
+      property => property.id === selectionId
+    );
 
-    const updatedSelection = alreadySelected
-      ? null
-      : this.state.properties.filter(
-          property => property.id === selectionId
-        )[0];
-
-    this.setState({ selectedProperty: updatedSelection }, () => {
+    this.setState({ selectedProperty: selectedProperty }, () => {
       if (this.props.selectedPropertyListener) {
-        this.props.selectedPropertyListener(updatedSelection);
+        this.props.selectedPropertyListener(selectedProperty);
       }
       console.debug("handleSelection state", this.state);
     });
@@ -245,26 +237,24 @@ class Properties extends React.Component {
    * - the search box is empty, or
    * - the search box's query value is contained within the Property's name
    */
-  generatePropertyListItem(propertyObj) {
+  generatePropertyListItem(property) {
     return (
       <ListItem
-        hidden={
-          !this.state.query || propertyObj.name.includes(this.state.query)
-        }
-        key={propertyObj.id}
+        hidden={!this.state.query || property.name.includes(this.state.query)}
+        key={property.id}
       >
         <Radio
-          checked={this.state.selectedProperty === propertyObj}
+          checked={this.state.selectedProperty === property}
           onChange={this.handleSelection}
-          value={propertyObj.id}
+          value={property.id}
         />
-        <ListItemText primary={propertyObj.name} />
+        <ListItemText primary={property.name} />
         <ListItemSecondaryAction>
           <IconButton
             aria-label="Delete"
             onClick={this.handleDelete}
-            value={propertyObj.name}
-            disabled={this.state.selectedProperty !== propertyObj}
+            value={property.name}
+            disabled={this.state.selectedProperty !== property}
           >
             <DeleteIcon />
           </IconButton>

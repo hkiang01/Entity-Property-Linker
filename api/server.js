@@ -52,8 +52,7 @@ app.post("/entity", function(req, res) {
   console.log("post '/entity' from", req.ip);
   const name = req.body.name;
   const values = [name];
-  const text =
-    "INSERT INTO entity(id, name) VALUES(uuid_generate_v4(), $1) RETURNING *";
+  const text = "INSERT INTO entity(name) VALUES($1) RETURNING *";
   client
     .query(text, values)
     .then(result => res.status(200).send(result.rows[0]))
@@ -104,8 +103,7 @@ app.post("/property", function(req, res) {
   console.log("post '/property' from", req.ip);
   const { name } = req.body;
   const values = [name];
-  const text =
-    "INSERT INTO property(id, name) VALUES(uuid_generate_v4(), $1) RETURNING *";
+  const text = "INSERT INTO property(name) VALUES($1) RETURNING *";
   client
     .query(text, values)
     .then(result => res.status(200).send(result.rows[0]))

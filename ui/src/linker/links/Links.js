@@ -13,6 +13,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Radio from "@material-ui/core/Radio";
 
 import * as apiConfig from "../../../config/api.json";
 import { Entity } from "../entities/Entities";
@@ -44,7 +45,8 @@ const styles = theme => ({
   }
 });
 
-function Link(entityId, propertyId) {
+function Link(id, entityId, propertyId) {
+  this.id = id;
   this.entityId = entityId;
   this.propertyId = propertyId;
 }
@@ -107,7 +109,7 @@ class Links extends React.Component {
     getLinks()
       .then(res => {
         const retrievedLinks = res.map(
-          record => new Link(record.entity_id, record.property_id)
+          record => new Link(record.id, record.entity_id, record.property_id)
         );
         this.setState({ links: retrievedLinks }, () => {
           console.debug("componentDidMount state", this.state);
@@ -125,13 +127,25 @@ class Links extends React.Component {
       record => {
         this.setState((prevState, props) => {
           let links = prevState.links;
-          links.push(new Link(record.entity_id, record.property_id));
+          links.push(new Link(record.id, record.entity_id, record.property_id));
           return {
             links: links
           };
         });
       }
     );
+  };
+
+  /**
+   * Toggles the selection of a Link
+   * If the Link is already selected,
+   */
+  handleSelection = selection => {
+    const selectionId = selection.currentTarget.value;
+    const selectedLink = this.state.links.find(link => link.id === selectionId);
+    this.setState({ selectedLink: selectedLink }, () => {
+      console.debug("handleSelection state", this.state);
+    });
   };
 
   /**
@@ -191,6 +205,14 @@ class Links extends React.Component {
         key={link.entityId + link.propertyId}
         selected={this.isLinkReferencedBySelectedEntityOrProperty(link)}
       >
+        <TableCell>
+          <Radio
+            checked={this.state.selectedLink === link}
+            onChange={this.handleSelection}
+            value={link.id}
+          />
+        </TableCell>
+        {/* // TODO: change IDs below to corresponding names */}
         <TableCell>{link.entityId}</TableCell>
         <TableCell>{link.propertyId}</TableCell>
       </TableRow>
@@ -238,6 +260,7 @@ class Links extends React.Component {
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
+                <TableCell />
                 <TableCell>Entity</TableCell>
                 <TableCell>Property</TableCell>
               </TableRow>

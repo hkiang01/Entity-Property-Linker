@@ -205,24 +205,17 @@ class Entities extends React.Component {
 
   /**
    * Toggles the selection of an entity
-   * If the entity is already selected, clear it,
-   * otherwise, check it.
-   *
    * Also notifies the selectedEntityListener, if defined, of the newly-selected Entity
    */
   handleSelection = selection => {
     const selectionId = selection.currentTarget.value;
-    const alreadySelected = !!(
-      this.state.selectedEntity && this.state.selectedEntity.id === selectionId
+    const selectedEntity = this.state.entities.find(
+      entity => entity.id === selectionId
     );
 
-    const updatedSelection = alreadySelected
-      ? null
-      : this.state.entities.filter(entity => entity.id === selectionId)[0];
-
-    this.setState({ selectedEntity: updatedSelection }, () => {
+    this.setState({ selectedEntity: selectedEntity }, () => {
       if (this.props.selectedEntityListener) {
-        this.props.selectedEntityListener(updatedSelection);
+        this.props.selectedEntityListener(selectedEntity);
       }
       console.debug("handleSelection state", this.state);
     });
@@ -242,24 +235,24 @@ class Entities extends React.Component {
    * - the search box is empty, or
    * - the search box's query value is contained within the entity's name
    */
-  generateEntityListItem(entityObj) {
+  generateEntityListItem(entity) {
     return (
       <ListItem
-        hidden={!this.state.query || entityObj.name.includes(this.state.query)}
-        key={entityObj.id}
+        hidden={!this.state.query || entity.name.includes(this.state.query)}
+        key={entity.id}
       >
         <Radio
-          checked={this.state.selectedEntity === entityObj}
+          checked={this.state.selectedEntity === entity}
           onChange={this.handleSelection}
-          value={entityObj.id}
+          value={entity.id}
         />
-        <ListItemText primary={entityObj.name} />
+        <ListItemText primary={entity.name} />
         <ListItemSecondaryAction>
           <IconButton
             aria-label="Delete"
             onClick={this.handleDelete}
-            value={entityObj.name}
-            disabled={this.state.selectedEntity !== entityObj}
+            value={entity.name}
+            disabled={this.state.selectedEntity !== entity}
           >
             <DeleteIcon />
           </IconButton>
