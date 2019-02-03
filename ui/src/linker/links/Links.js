@@ -154,8 +154,9 @@ class Links extends React.Component {
   }
 
   /**
-   * Whether the selected Entity or Property
-   * references the Link
+   * Whether the selected Entity or Property references the Link.
+   * This is helpful in informing the user what Entities and Properties
+   * are linked to a given Link
    */
   isLinkReferencedBySelectedEntityOrProperty = link => {
     const referencedBySelectedEntity = this.props.selectedEntity
@@ -167,6 +168,11 @@ class Links extends React.Component {
     return referencedBySelectedEntity || referencedBySelectedProperty;
   };
 
+  /**
+   * A "Links" component is titled with the word "Links".
+   * Below that, a search bar and a button to "Add Link" is present.
+   * Finally, a table is shown listing the links present in state.
+   */
   render() {
     console.debug("Links props", this.props);
     const { classes } = this.props;
