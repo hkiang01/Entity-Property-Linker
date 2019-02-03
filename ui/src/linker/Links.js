@@ -297,7 +297,6 @@ class Links extends React.Component {
             value={namedLink.id}
           />
         </TableCell>
-        {/* // TODO: change IDs below to corresponding names */}
         <TableCell>{namedLink.entityName}</TableCell>
         <TableCell>{namedLink.propertyName}</TableCell>
         <TableCell>
