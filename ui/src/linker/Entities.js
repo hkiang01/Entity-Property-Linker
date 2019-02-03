@@ -239,15 +239,18 @@ class Entities extends React.Component {
    * - Selecting an entity
    * - Deleting an entity
    *
-   * Finally, the entity is visible only if:
-   * - the search box is empty, or
-   * - the search box's query value is contained within the entity's name
+   * Finally, the entity is disabled only if:
+   * - it's not selected entity and...
+   *   - the search box's query value is not contained within the entity's name
    */
   generateEntityListItem(entity) {
     return (
       <ListItem
-        // hidden={!(this.state.query || entity.name.includes(this.state.query))}
-        hidden={true}
+        disabled={
+          this.state.selectedEntity !== entity &&
+          this.state.query &&
+          !entity.name.includes(this.state.query)
+        }
         key={entity.id}
       >
         <Radio

@@ -240,14 +240,18 @@ class Properties extends React.Component {
    * - Selecting an Property
    * - Deleting an Property
    *
-   * Finally, the Property is visible only if:
-   * - the search box is empty, or
-   * - the search box's query value is contained within the Property's name
+   * Finally, the property is disabled only if:
+   * - it's not selected property and...
+   *   - the search box's query value is not contained within the property's name
    */
   generatePropertyListItem(property) {
     return (
       <ListItem
-        hidden={!this.state.query || property.name.includes(this.state.query)}
+        disabled={
+          this.state.selectedProperty !== property &&
+          this.state.query &&
+          !property.name.includes(this.state.query)
+        }
         key={property.id}
       >
         <Radio
@@ -299,7 +303,7 @@ class Properties extends React.Component {
           />
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             disabled={!this.state.enableAddButton}
             onClick={this.handleAdd}
           >
