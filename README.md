@@ -1,11 +1,11 @@
-# eop (entities of properties)
+# Entity-Property Linker
 
 A simple Dockerized CRUD app using [Postgres](https://www.postgresql.org/), [Express](https://expressjs.com/), and [React](https://reactjs.org/) that manages entities, which have properties.
 Migrations are handled in the API and use [db-migrate](https://github.com/db-migrate/node-db-migrate).
 The purpose of this project was to refresh my React skills and teach myself how to work with [Material-UI](https://material-ui.com/).
 The most important part of this project (and I would very much like feedback on this) are the [Design decisions](#design-decisions).
 
-- [eop (entities of properties)](#eop-entities-of-properties)
+- [Entity-Property Linker](#entity-property-linker)
   - [Design decisions](#design-decisions)
   - [Prerequisites](#prerequisites)
   - [Running the application](#running-the-application)
