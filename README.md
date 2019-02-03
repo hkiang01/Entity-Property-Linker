@@ -24,7 +24,7 @@ The most important part of this project (and I would very much like feedback on 
 
 ## Design decisions
 
-Priority number 1: enable the delivery business value
+Priority number 1: enable the of delivery business value
 
 1. Dockerized from the start
 
