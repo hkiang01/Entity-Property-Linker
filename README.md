@@ -63,8 +63,7 @@ Priority number 1: enable the delivery business value
 
 - [docker](https://docs.docker.com/install/)
 - [docker-compose](https://docs.docker.com/compose/install/)
-- [node](https://nodejs.org/en/) (make sure the version used in [ui/Dockerfile](ui/Dockerfile) corresponds to the version used in [.nvmrc](.nvmrc))
-- [nvm](https://github.com/creationix/nvm#important-notes)
+- [nvm](https://github.com/creationix/nvm)
   Load the version of node used in the project:
   ```bash
   nvm use
