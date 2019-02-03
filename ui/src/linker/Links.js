@@ -43,6 +43,10 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
+  },
+  tableContainer: {
+    maxHeight: "50vh",
+    overflow: "auto"
   }
 });
 
@@ -93,7 +97,7 @@ const getNamedLinks = async () => {
 };
 
 /**
- * Delets link from the database
+ * Deletes link from the database
  */
 const deleteLink = async link => {
   console.debug("deleteLink link", link);
@@ -194,6 +198,21 @@ class Links extends React.Component {
         return { namedLinks: namedLinks, selectedNamedLink: null };
       });
     });
+  };
+
+  /**
+   * Filters the list of visible links
+   */
+  handleSearch = event => {
+    const queryValue = event.target.value;
+    this.setState(
+      {
+        query: queryValue,
+      },
+      () => {
+        console.debug("handleSearch state", this.state);
+      }
+    );
   };
 
   /**
@@ -327,7 +346,7 @@ class Links extends React.Component {
             Add Link
           </Button>
         </Grid>
-        <Grid container spacing={16}>
+        <Grid container spacing={16} className={classes.tableContainer}>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>

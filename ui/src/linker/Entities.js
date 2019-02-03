@@ -36,6 +36,10 @@ const styles = theme => ({
   input: {
     marginLeft: 8,
     flex: 1
+  },
+  listContainer: {
+    maxHeight: "50vh",
+    overflow: "auto"
   }
 });
 
@@ -182,7 +186,7 @@ class Entities extends React.Component {
   };
 
   /**
-   * Filters the list of entities
+   * Filters the list of visible entities
    * Sets the condition for the add button to be enabled. It should be enabled if:
    * - 'query' is empty, or
    * - there exists no entity in the list whose name equals the 'query'
@@ -297,7 +301,7 @@ class Entities extends React.Component {
             Add
           </Button>
         </Grid>
-        <Grid container spacing={16}>
+        <Grid container spacing={16} className={classes.listContainer}>
           <List id="entities-list" className={classes.root}>
             {this.state.entities.map(entity =>
               this.generateEntityListItem(entity)

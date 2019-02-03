@@ -37,6 +37,10 @@ const styles = theme => ({
   input: {
     marginLeft: 8,
     flex: 1
+  },
+  listContainer: {
+    maxHeight: "50vh",
+    overflow: "auto"
   }
 });
 
@@ -299,7 +303,7 @@ class Properties extends React.Component {
             Add
           </Button>
         </Grid>
-        <Grid container spacing={16}>
+        <Grid container spacing={16} className={classes.listContainer}>
           <List id="properties-list" className={classes.root}>
             {this.state.properties.map(entity =>
               this.generatePropertyListItem(entity)
