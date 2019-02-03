@@ -47,23 +47,6 @@ app.get("/entity", function(req, res) {
     });
 });
 
-// get entity records where id is present in list of ids
-app.get("/entity/:ids", function(req, res) {
-  console.log("get '/entity/:ids' from", req.ip);
-  const { id } = req.body;
-  const values = [id.join(",")];
-  const text = "SELECT * FROM entity WHERE id IN ($1)";
-  client
-    .query(text, values)
-    .then(results => res.status(200).json(results.rows))
-    .catch(err => {
-      console.error(err.stack);
-      res.status(500).send({
-        error: err.stack
-      });
-    });
-});
-
 // insert entity
 app.post("/entity", function(req, res) {
   console.log("post '/entity' from", req.ip);
@@ -115,23 +98,6 @@ app.get("/property", function(req, res) {
     });
 });
 
-// get property records where id is present in list of ids
-app.get("/property/:ids", function(req, res) {
-  console.log("get '/property/:ids' from", req.ip);
-  const { id } = req.body;
-  const values = [id.join(",")];
-  const text = "SELECT * FROM property WHERE id IN ($1)";
-  client
-    .query(text, values)
-    .then(results => res.status(200).json(results.rows))
-    .catch(err => {
-      console.error(err.stack);
-      res.status(500).send({
-        error: err.stack
-      });
-    });
-});
-
 // insert new property by name and sample value
 app.post("/property", function(req, res) {
   console.log("post '/property' from", req.ip);
@@ -167,7 +133,7 @@ app.delete("/property", function(req, res) {
     });
 });
 
-// get links
+// get all
 app.get("/link", function(req, res) {
   console.log("get '/link' from", req.ip);
   client
@@ -191,6 +157,39 @@ app.post("/link", function(req, res) {
   client
     .query(text, values)
     .then(result => res.status(200).send(result.rows[0]))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
+});
+
+// delete link
+app.options("/link", cors()); // enable pre-flight request for DELETE request
+app.delete("/link", function(req, res) {
+  console.log("delete '/link' from", req.ip);
+  const { id } = req.body;
+  const values = [id, name];
+  const text = "DELETE FROM link WHERE id=$1 RETURNING *";
+  client
+    .query(text, values)
+    .then(result => res.status(200).send(result.rows[0]))
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send({
+        error: err.stack
+      });
+    });
+});
+
+
+// get all named_links
+app.get("/named_link", function(req, res) {
+  console.log("get '/named_link' from", req.ip);
+  client
+    .query("SELECT * FROM named_link")
+    .then(results => res.status(200).json(results.rows))
     .catch(err => {
       console.error(err.stack);
       res.status(500).send({
