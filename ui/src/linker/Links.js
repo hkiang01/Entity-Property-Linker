@@ -242,18 +242,29 @@ class Links extends React.Component {
    * - Selecting an link
    * - Deleting an link
    *
-   * Finally, the NamedLink is visible only if:
-   * - the search box is empty, or
-   * - the search box's query value is contained within either:
-   *   - the NamedLink's coressponding Entity name
-   *   - the NamedLink's coressponding Property name
    */
   generateLinkTableRow(namedLink) {
+    /**
+     * A NamedLink is selected only if:
+     * - the search box's query value is contained within either:
+     *   - the NamedLink's coressponding Entity name
+     *   - the NamedLink's coressponding Property name
+     * or,
+     * - the search box is empty (and a corresponding entity or property is not selected)
+     */
+    const isSelected = namedLink => {
+      if (this.state.query) {
+        return (
+          namedLink.entityName.includes(this.state.query) ||
+          namedLink.propertyName.includes(this.state.query)
+        );
+      } else {
+        return this.isLinkReferencedBySelectedEntityOrProperty(namedLink);
+      }
+    };
+
     return (
-      <TableRow
-        key={namedLink.id}
-        selected={this.isLinkReferencedBySelectedEntityOrProperty(namedLink)}
-      >
+      <TableRow key={namedLink.id} selected={isSelected(namedLink)}>
         <TableCell>
           <Radio
             checked={this.state.selectedNamedLink === namedLink}
