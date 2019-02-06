@@ -22,6 +22,10 @@ The most important part of this project (and I would very much like feedback on 
 
 ![alt text](screenshot.png "Screnshot")
 
+Design inspired by this [ui.StackExchange post](https://ux.stackexchange.com/a/25723)
+
+![alt text](https://i.stack.imgur.com/9jnng.png "Inspiration")
+
 ## Design decisions
 
 Priority number 1: enable the of delivery business value
