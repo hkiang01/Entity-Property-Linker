@@ -116,14 +116,21 @@ class Entities extends React.Component {
    * Removes the selected entity from the list of Entities,
    * then sets the selected entity to null.
    */
-  handleDelete = event => {
+  handleDelete = () => {
     const entityToDelete = this.state.selectedEntity;
     deleteEntity(entityToDelete).then(() => {
-      this.setState(prevState => {
-        let entities = prevState.entities;
-        entities = entities.filter(entity => entity !== entityToDelete);
-        return { entities: entities, selectedEntity: null };
-      });
+      this.setState(
+        prevState => {
+          let entities = prevState.entities;
+          entities = entities.filter(entity => entity !== entityToDelete);
+          return { entities: entities, selectedEntity: null };
+        },
+        () => {
+          if (this.props.selectedEntityListener) {
+            this.props.selectedEntityListener(new Entity());
+          }
+        }
+      );
     });
   };
 

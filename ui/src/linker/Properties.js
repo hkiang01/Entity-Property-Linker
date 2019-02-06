@@ -90,7 +90,7 @@ class Properties extends React.Component {
    * Finally, it clears the 'query' (both state and search bar value)
    * so the Property list can be displayed in full.
    */
-  handleAdd = event => {
+  handleAdd = () => {
     const newPropertyName = document.getElementById("property-query").value;
     addProperty(newPropertyName).then(response => {
       this.setState(
@@ -118,13 +118,20 @@ class Properties extends React.Component {
   handleDelete = () => {
     const propertyToDelete = this.state.selectedProperty;
     deleteProperty(propertyToDelete).then(response => {
-      this.setState(prevState => {
-        let properties = prevState.properties;
-        properties = properties.filter(
-          property => property !== propertyToDelete
-        );
-        return { properties: properties };
-      });
+      this.setState(
+        prevState => {
+          let properties = prevState.properties;
+          properties = properties.filter(
+            property => property !== propertyToDelete
+          );
+          return { properties: properties };
+        },
+        () => {
+          if (this.props.selectedPropertyListener) {
+            this.props.selectedPropertyListener(new Property());
+          }
+        }
+      );
     });
   };
 
