@@ -34,19 +34,29 @@ Priority number 1: enable the of delivery business value
 
    This also makes deployments easier as some changes might be tightly coupled between, the API and UI. THis enables you to deliver business value faster.
 
-3. Migrations in the API (see [Pattern: Database per service](https://microservices.io/patterns/data/database-per-service.html))
+   Check out this artifle
 
-   You need migrations. Don't create separate files that you need to run manually. Your application should be as easy to run and deploy as possible. Migrations make this easier. Migrations enable you to deliver business value faster.
+3. Migrations, migrations, migrations (see [Pattern: Database per service](https://microservices.io/patterns/data/database-per-service.html))
+
+   You need migrations. Don't create separate files that you need to run manually. Your application should be as easy to run and deploy as possible. Migrations enable this, and allow you to deliver business value faster.
 
 4. UI React components grouped by features (see [File Structure](https://reactjs.org/docs/faq-structure.html#grouping-by-features-or-routes))
 
-   This makes it easier to focus on features that deliver business value vs getting lost in the technical details of how to implement business features. This enables you to deliver business value faster.
+   Organizing code by features allows you to spend less time trying to figure out all the relationships between code and more time devlivering business value.
 
-   This design choice may incur code duplication, but managing components by component type does not enable to you deliver business value as quickly, e.g., in the case of 2 like concepts that are managed by a single component type all of a sudden diverging from each other. The UI/UX professionals that maintain popular component libraries have already figured out all of the reusable components necessary in a UI project. If you're writing a component library, organize components by component type. If you're writing a business application, organize components by feature.
+   > As a developer, it is common to spend more time figuring out what the code does rather than actually writing code. - [Alexis Mangin](https://medium.com/@alexmngn)
 
-5. API calls build into React UI components.
+   > When you work on a large project, it can be a difficult to identity to origin of an issue. As a developer, you might spend valuable time digging through thousands of lines of code until you understand all the relationships. Organizing your code by modules means you start thinking around a concept where you break down your code into related pieces and provide a public interface to use your module. It helps maximize code sharing and reusability in different sections of your application and even on other projects.
 
-   The whole point of components is that they're reusable. There should be as few tightly coupled relationships between files as possible. You should be able to move around a given `.js` file containing a component at will. This enables agility and enables you to deliver business value faster.
+   See: [Why React developers should modularize their applications?](https://medium.com/@alexmngn/why-react-developers-should-modularize-their-applications-d26d381854c1)
+
+5. API calls should live separately from React components.
+
+   > React is a declarative, efficient, and flexible JavaScript library for building user interfaces. - [What is React](https://reactjs.org/tutorial/tutorial.html#what-is-react)
+
+   If there's one place in your app where business logic will be present, it would be close to the API calls. You may need to transform the data returned from the API before presenting it. This business logic should be separate from the React component itself.
+
+   This business logic could be different from scene to scene (see [How to better organize your React applications?](https://medium.com/@alexmngn/how-to-better-organize-your-react-applications-2fd3ea1920f1)). Knowing this, while we want to isolate the business logic and API calls from the components themselves, they should remain in the context of the business feature (or [scene](https://medium.com/@alexmngn/how-to-better-organize-your-react-applications-2fd3ea1920f1)). This allows developers to remain in the context of the feature or scene being developed when delivering business value. If a global API service is implemented, it will quickly outgrow to the point where it becomes less readable and maintainable merely due to its size. Keeping the services, including the API, within the context of a given feature or scene limits this overgrowth. This goes hand in with grouping components into by features (see [File Structure](https://reactjs.org/docs/faq-structure.html#grouping-by-features-or-routes)). This enables you to deliver business value faster.
 
 6. JSON objects returned from API should mirror their corresponding DB schemas.
 
