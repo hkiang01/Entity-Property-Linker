@@ -16,6 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import * as apiConfig from "../../config/api.json";
+import { Entity } from "./models/Entity";
 
 /**
  * Styles named after their respective components.
@@ -46,17 +47,6 @@ const styles = theme => ({
     overflow: "auto"
   }
 });
-
-/**
- * An Entity corresponding to the DB's `entity` table.
- * This schema is available to be imported
- */
-export class Entity {
-  constructor(id, name) {
-    this.id = id;
-    this.name = name;
-  }
-}
 
 /**
  * The baseUrl for API requests

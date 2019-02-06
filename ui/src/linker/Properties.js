@@ -16,6 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import * as apiConfig from "../../config/api.json";
+import { Property } from "./models/Property";
 
 /**
  * Styles named after their respective components.
@@ -51,17 +52,6 @@ const styles = theme => ({
  * The baseUrl for API requests
  */
 const endpoint = apiConfig.dev.endpoint;
-
-/**
- * An Property corresponding to the DB's `Property` table
- * This is available to be imported
- */
-export class Property {
-  constructor(id, name) {
-    this.id = id;
-    this.name = name;
-  }
-}
 
 /**
  * Gets properties from the database

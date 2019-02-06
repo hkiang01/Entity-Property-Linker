@@ -16,8 +16,10 @@ import Radio from "@material-ui/core/Radio";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import * as apiConfig from "../../config/api.json";
-import { Entity } from "./Entities";
-import { Property } from "./Properties";
+import { Link } from "./models/Link";
+import { NamedLink } from "./models/NamedLink";
+import { Entity } from "./models/Entity";
+import { Property } from "./models/Property";
 
 /**
  * Styles named after their respective components.
@@ -47,30 +49,6 @@ const styles = theme => ({
     top: 0
   }
 });
-
-/**
- * Mimics the link table
- */
-class Link {
-  constructor(id, entityId, propertyId) {
-    this.id = id;
-    this.entityId = entityId;
-    this.propertyId = propertyId;
-  }
-}
-
-/**
- * Mimics the named_link table
- */
-export class NamedLink {
-  constructor(id, entityId, entityName, propertyId, propertyName) {
-    this.id = id;
-    this.entityId = entityId;
-    this.entityName = entityName;
-    this.propertyId = propertyId;
-    this.propertyName = propertyName;
-  }
-}
 
 /**
  * The baseUrl for API requests

@@ -7,8 +7,8 @@ import Button from "@material-ui/core/Button";
 import Entities from "./Entities";
 import Properties from "./Properties";
 import Links from "./Links";
-import { Entity } from "./Entities";
-import { Property } from "./Properties";
+import { Entity } from "./models/Entity";
+import { Property } from "./models/Property";
 import { NamedLink } from "./Links";
 import * as apiConfig from "../../config/api.json";
 
