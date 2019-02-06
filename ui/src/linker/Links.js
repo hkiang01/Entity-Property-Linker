@@ -15,11 +15,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Radio from "@material-ui/core/Radio";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import * as apiConfig from "../../config/api.json";
-import { Link } from "./models/Link";
-import { NamedLink } from "./models/NamedLink";
-import { Entity } from "./models/Entity";
-import { Property } from "./models/Property";
+import { Entity, Property, Link } from "./services/models";
+import { getNamedLinks, deleteLink } from "./services/api";
 
 /**
  * Styles named after their respective components.
@@ -49,55 +46,6 @@ const styles = theme => ({
     top: 0
   }
 });
-
-/**
- * The baseUrl for API requests
- */
-const endpoint = apiConfig.dev.endpoint;
-
-/**
- * Gets named_link records from the database
- */
-const getNamedLinks = async () => {
-  const response = await fetch(endpoint + "/named_link");
-  const body = await response.json();
-  console.debug("getLinks response", response);
-  if (response.status !== 200) throw Error(body.message);
-
-  const result = Promise.resolve(body);
-  return result.then(function(records) {
-    console.debug("getNamedLinks records", records);
-    return records.map(
-      record =>
-        new NamedLink(
-          record.id,
-          record.entity_id,
-          record.entity_name,
-          record.property_id,
-          record.property_name
-        )
-    );
-  });
-};
-
-/**
- * Deletes link from the database
- */
-const deleteLink = async link => {
-  console.debug("deleteLink link", link);
-  const data = JSON.stringify({ id: link.id });
-  const response = await fetch(endpoint + "/link", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("deleteLink response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
 
 class Links extends React.Component {
   /**

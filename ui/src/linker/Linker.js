@@ -7,10 +7,8 @@ import Button from "@material-ui/core/Button";
 import Entities from "./Entities";
 import Properties from "./Properties";
 import Links from "./Links";
-import { Entity } from "./models/Entity";
-import { Property } from "./models/Property";
-import { NamedLink } from "./Links";
-import * as apiConfig from "../../config/api.json";
+import { Entity, Property, NamedLink } from "./services/models";
+import { addLink } from "./services/api";
 
 const styles = theme => ({
   root: {
@@ -20,29 +18,6 @@ const styles = theme => ({
     flexGrow: 1
   }
 });
-
-/**
- * The baseUrl for API requests
- */
-const endpoint = apiConfig.dev.endpoint;
-
-/**
- * Adds aa link to the database by entityId and propertyId
- */
-const addLink = async (entityId, propertyId) => {
-  const data = JSON.stringify({ entityId: entityId, propertyId: propertyId });
-  const response = await fetch(endpoint + "/link", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("addLink response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
 
 class Linker extends React.Component {
   constructor() {

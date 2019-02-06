@@ -15,8 +15,8 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import * as apiConfig from "../../config/api.json";
-import { Entity } from "./models/Entity";
+import { Entity } from "./services/models";
+import { getEntities, addEntity, deleteEntity } from "./services/api";
 
 /**
  * Styles named after their respective components.
@@ -47,58 +47,6 @@ const styles = theme => ({
     overflow: "auto"
   }
 });
-
-/**
- * The baseUrl for API requests
- */
-const endpoint = apiConfig.dev.endpoint;
-
-/**
- * Gets entities from the database
- */
-const getEntities = async () => {
-  const response = await fetch(endpoint + "/entity");
-  const body = await response.json();
-  console.debug("getEntities response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
-
-/**
- * Adds an entity to the database by name
- */
-const addEntity = async name => {
-  const data = JSON.stringify({ name: name });
-  const response = await fetch(endpoint + "/entity", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("addEntity response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
-
-/**
- * Delets entity from the database
- */
-const deleteEntity = async entity => {
-  const data = JSON.stringify({ id: entity.id, name: entity.name });
-  const response = await fetch(endpoint + "/entity", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("deleteEntity response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
 
 class Entities extends React.Component {
   /**

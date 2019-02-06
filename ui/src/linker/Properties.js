@@ -15,8 +15,8 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import * as apiConfig from "../../config/api.json";
-import { Property } from "./models/Property";
+import { Property } from "./services/models";
+import { getProperties, addProperty, deleteProperty } from "./services/api";
 
 /**
  * Styles named after their respective components.
@@ -47,58 +47,6 @@ const styles = theme => ({
     overflow: "auto"
   }
 });
-
-/**
- * The baseUrl for API requests
- */
-const endpoint = apiConfig.dev.endpoint;
-
-/**
- * Gets properties from the database
- */
-const getProperties = async () => {
-  const response = await fetch(endpoint + "/property");
-  const body = await response.json();
-  console.debug("getProperties response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
-
-/**
- * Adds a Property to the database
- */
-const addProperty = async name => {
-  const data = JSON.stringify({ name: name });
-  const response = await fetch(endpoint + "/property", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("addProperty response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
-
-/**
- * Deletes Properties from the database
- */
-const deleteProperty = async property => {
-  const data = JSON.stringify({ id: property.id, name: property.name });
-  const response = await fetch(endpoint + "/property", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: data
-  });
-  const body = await response.json();
-  console.debug("deleteProperty response", response);
-  if (response.status !== 200) throw Error(body.message);
-  return body;
-};
 
 class Properties extends React.Component {
   /**
