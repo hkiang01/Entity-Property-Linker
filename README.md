@@ -36,9 +36,9 @@ Priority number 1: enable the of delivery business value
 
 2. A single repo instead of 2. Why? 1 PR for everything instead of 1 PR for the API, and then another for the UI
 
-   This also makes deployments easier as some changes might be tightly coupled between, the API and UI. THis enables you to deliver business value faster.
+   This also makes deployments easier as some changes might be tightly coupled between, the API and UI. This enables you to deliver business value faster, at least in the initial stages.
 
-   Check out this artifle
+  Take this with a grain of salt, as this can run into scaling issues down the line.
 
 3. Migrations, migrations, migrations (see [Pattern: Database per service](https://microservices.io/patterns/data/database-per-service.html))
 
