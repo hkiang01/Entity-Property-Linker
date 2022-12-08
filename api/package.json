@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/hkiang01/Entity-Property-Linker#readme",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "db-migrate": "^0.11.5",
     "db-migrate-pg": "^0.4.0",
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "fs": "0.0.1-security",
     "pg": "^7.8.0"
   }
