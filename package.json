@@ -4,7 +4,7 @@
   "description": "dev tools for entity-property-linker",
   "main": "\"\"",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.17.3"
   },
   "devDependencies": {
     "prettier": "^1.16.3"
